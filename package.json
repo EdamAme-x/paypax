@@ -19,6 +19,8 @@
   "devDependencies": {
     "@hono/eslint-config": "^0.0.3",
     "denoify": "^1.6.9",
+    "esbuild": "^0.19.11",
+    "glob": "^10.3.10",
     "rimraf": "^5.0.5"
   },
   "repository": {
