@@ -10,13 +10,13 @@ https://www.npmjs.com/package/paypayjs
 
 - Node.js or Bun
 ```shell
-npm i --save-dev paypayjs
+npm i --save-dev paypay.x.js
 or
-yarn add -D paypayjs
+yarn add -D paypay.x.js
 or
-pnpm i -save-dev paypayjs
+pnpm i -save-dev paypay.x.js
 or
-bun i -D paypayjs
+bun i -D paypay.x.js
 ```
 
 - Deno
