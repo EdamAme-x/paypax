@@ -1,5 +1,5 @@
 # paypay.js
-PayPay Un Offical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
+PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
 
 for Node.js
