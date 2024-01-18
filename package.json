@@ -9,7 +9,8 @@
     "build": "rimraf dist && tsx ./build.ts",
     "build:deno": "rimraf deno_dist && denoify",
     "build:all": "pnpm build && pnpm build:deno",
-    "release": "pnpm build:all && pnpm publish",
+    "release": "pnpm build:all && pnpm publish --no-git-checks",
+    "relaase:all": "pnpm build:all && pnpm publish --no-git-checks && git add * && git commit -m 'auto: release' && git push",
     "test": "vitest --run",
     "test:type": "tsc --noEmit"
   },
