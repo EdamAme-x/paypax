@@ -1,14 +1,14 @@
 import { PayPayError, isPassword, isPhone, isUuid } from '..'
 import { createHeader } from '../headers'
 import type {
-  FetchContext,
   LoginContext,
   OTP,
+  ResponseBalance,
   ResponseBody,
   baseHeader,
   loginResult,
 } from '../types'
-import { parseCookieFromMap } from '../utils/parse'
+import { parseBalanceContext, parseCookieFromMap } from '../utils/parse'
 
 export class PayPay {
   phone: string = ''
@@ -136,9 +136,6 @@ export class PayPay {
         language: 'ja',
       }
 
-      console.log(ctx)
-      console.log(parseCookieFromMap(this.cookie))
-
       const response = await fetch('https://www.paypay.ne.jp/app/v1/oauth/token', {
         method: 'POST',
         headers: {
@@ -150,7 +147,6 @@ export class PayPay {
       })
 
       const result: ResponseBody = await response.json()
-      console.log(result)
 
       if ('access_token' in result) {
         this.token = result.access_token
@@ -189,10 +185,7 @@ export class PayPay {
     }
   }
 
-  async balance(): Promise<ResponseBody> {
-    // balance=self.session.get("https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo",headers=headers,proxies=self.proxy)
-    // return balance.json()
-
+  async getBalance(): Promise<ResponseBalance | undefined> {
     const response = await fetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
       method: 'GET',
       headers: {
@@ -201,6 +194,12 @@ export class PayPay {
       },
     })
 
-    return await response.json()
+    if (!response.ok) {
+      return undefined
+    }
+
+    const result = await response.json()
+
+    return parseBalanceContext(result)
   }
 }

@@ -26,3 +26,22 @@ export type FetchContext = {
 }
 
 export type ResponseBody = any & {}
+
+export type ResponseBalance = {
+    success: true,
+    total: number,
+    currency: 'JPY' | string,
+    updated_at: string,
+    raw: {
+        header: {
+            resultCode: string,
+            resultMessage: string
+        },
+        payload: {
+            walletSummary: any,
+            walletDetail: any,
+            walletDescription: any,
+            [key: string]: string | boolean
+        }
+    }
+}

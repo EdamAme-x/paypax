@@ -1,14 +1,14 @@
 import { PayPayError, isPassword, isPhone, isUuid } from '../index.ts'
 import { createHeader } from '../headers/index.ts'
 import type {
-  FetchContext,
   LoginContext,
   OTP,
+  ResponseBalance,
   ResponseBody,
   baseHeader,
   loginResult,
 } from '../types.ts'
-import { parseCookieFromMap } from '../utils/parse.ts'
+import { parseBalanceContext, parseCookieFromMap } from '../utils/parse.ts'
 
 export class PayPay {
   phone: string = ''
@@ -42,6 +42,13 @@ export class PayPay {
   }
 
   async login({ uuid, token }: LoginContext = {}): Promise<loginResult> {
+    if (this.isLogged()) {
+      return {
+        success: true,
+        status: 'LoginAlreadySuccess',
+      }
+    }
+
     if (token) {
       this.token = token
       this.logged = true
@@ -112,6 +119,10 @@ export class PayPay {
     }
   }
 
+  isLogged(): boolean {
+    return this.logged
+  }
+
   async otpLogin(otp: string): Promise<loginResult> {
     if (this.otp.waiting) {
       const ctx = {
@@ -125,9 +136,6 @@ export class PayPay {
         language: 'ja',
       }
 
-      console.log(ctx)
-      console.log(parseCookieFromMap(this.cookie))
-
       const response = await fetch('https://www.paypay.ne.jp/app/v1/oauth/token', {
         method: 'POST',
         headers: {
@@ -139,7 +147,6 @@ export class PayPay {
       })
 
       const result: ResponseBody = await response.json()
-      console.log(result)
 
       if ('access_token' in result) {
         this.token = result.access_token
@@ -156,9 +163,16 @@ export class PayPay {
         }
       }
     } else {
-      return {
-        success: true,
-        status: 'LoginAlreadySuccess',
+      if (this.isLogged()) {
+        return {
+          success: true,
+          status: 'LoginAlreadySuccess',
+        }
+      } else {
+        return {
+          success: false,
+          status: 'LoginFailed',
+        }
       }
     }
   }
@@ -171,10 +185,7 @@ export class PayPay {
     }
   }
 
-  async balance(): Promise<ResponseBody> {
-    // balance=self.session.get("https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo",headers=headers,proxies=self.proxy)
-    // return balance.json()
-
+  async getBalance(): Promise<ResponseBalance | undefined> {
     const response = await fetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
       method: 'GET',
       headers: {
@@ -183,6 +194,12 @@ export class PayPay {
       },
     })
 
-    return await response.json()
+    if (!response.ok) {
+      return undefined
+    }
+
+    const result = await response.json()
+
+    return parseBalanceContext(result)
   }
 }
