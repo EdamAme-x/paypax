@@ -1,5 +1,5 @@
 {
-  "name": "paypayjs",
+  "name": "@ame-x/paypayjs",
   "version": "1.0.0",
   "description": "Library for automate PayPay operations",
   "scripts": {
