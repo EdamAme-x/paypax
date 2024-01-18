@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/EdamAme-x/paypay.js.git"
+    "url": "https://github.com/EdamAme-x/paypay.x.js.git"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://npm.pkg.github.com"
   },
   "homepage": "https://paypayjs.ame-x.net",
   "dependencies": {
