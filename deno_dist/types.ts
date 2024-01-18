@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { PayPayStatus } from './status/index.ts'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Anyone = any
 
@@ -7,10 +9,12 @@ export type baseHeader = {
   'Content-Type': string
 }
 
-export type loginResult<T = Record<string, Anyone>> = {
+export type loginResultStatus = keyof typeof PayPayStatus
+
+export type loginResult = {
   success: boolean
-  status: string
-  context: T
+  // { a:1, b:2 } => a|b
+  status: loginResultStatus
 }
 
 export type OTP = {

@@ -9,6 +9,7 @@ import type {
   ResponseUserInfo,
   baseHeader,
   loginResult,
+  loginResultStatus,
 } from '../types'
 import { parseBalanceContext, parseCookieFromMap, parseUserInfoContext } from '../utils/parse'
 
@@ -43,24 +44,23 @@ export class PayPay {
     }
   }
 
+  private createLoginResult(success: boolean, status: loginResultStatus): loginResult {
+    return {
+      success,
+      status,
+    }
+  }
+
   async login({ uuid, token }: LoginContext = {}): Promise<loginResult> {
     if (this.isLogged()) {
-      return {
-        success: true,
-        status: 'LoginAlreadySuccess',
-        context: {},
-      }
+      return this.createLoginResult(true, 'LoginAlreadySuccess')
     }
 
     if (token) {
       this.token = token
       this.logged = true
       this.cookie.set('token', token)
-      return {
-        success: true,
-        status: 'LoginSuccess',
-        context: {},
-      }
+      return this.createLoginResult(true, 'LoginSuccess')
     }
 
     if (uuid) {
@@ -68,11 +68,8 @@ export class PayPay {
         this.uuid = uuid
       } else {
         new PayPayError('UUID is not valid', 0)
-        return {
-          success: false,
-          status: 'LoginFailed',
-          context: {},
-        }
+
+        return this.createLoginResult(false, 'LoginFailed')
       }
     } else {
       this.uuid = crypto.randomUUID()
@@ -100,36 +97,20 @@ export class PayPay {
       this.token = result.access_token
       this.logged = true
       this.cookie.set('token', result.access_token)
-      return {
-        success: true,
-        status: 'LoginSuccess',
-        context: {
-          result,
-        },
-      }
+
+      return this.createLoginResult(true, 'LoginSuccess')
     } else {
       if (result['response_type'] === 'ErrorResponse') {
-        return {
-          success: false,
-          status: 'LoginFailed',
-          context: {
-            result,
-          },
-        }
+
+        return this.createLoginResult(false, 'LoginFailed')
       } else {
         this.otp = {
           waiting: true,
           otp_prefix: result['otp_prefix'],
           otp_ref_id: result['otp_reference_id'],
         }
-        return {
-          success: false,
-          status: 'LoginNeedOTP',
-          context: {
-            result,
-            otp: Object.create(this.otp),
-          },
-        }
+        
+        return this.createLoginResult(false, 'LoginNeedOTP')
       }
     }
   }
@@ -140,11 +121,7 @@ export class PayPay {
 
   async otpLogin(otp: string): Promise<loginResult> {
     if (this.isLogged()) {
-      return {
-        success: true,
-        status: 'LoginAlreadySuccess',
-        context: {},
-      }
+      return this.createLoginResult(true, 'LoginAlreadySuccess')
     }
 
     if (this.otp.waiting) {
@@ -175,28 +152,12 @@ export class PayPay {
         this.token = result.access_token
         this.logged = true
         this.cookie.set('token', result.access_token)
-        return {
-          success: true,
-          status: 'OTPLoginSuccess',
-          context: {
-            result,
-          },
-        }
+        return this.createLoginResult(true, 'OTPLoginSuccess')
       } else {
-        return {
-          success: false,
-          status: 'OTPLoginFail',
-          context: {
-            result,
-          },
-        }
+        return this.createLoginResult(false, 'OTPLoginFail')
       }
     } else {
-      return {
-        success: false,
-        status: 'LoginDontNeedOTP',
-        context: {},
-      }
+      return this.createLoginResult(false, 'LoginDontNeedOTP')
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "paypay.x.js",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Library for automate PayPay operations",
   "scripts": {
     "format": "prettier --write ./src/*.{ts,tsx} ./src/**/*.{ts,tsx}",
