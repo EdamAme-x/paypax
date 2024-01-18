@@ -12,12 +12,12 @@
  * ```
  */
 export function isPhone(phone: string): boolean {
-    return /^0[1-9]0\d{8}$/.test(phone)
+  return /^0[1-9]0\d{8}$/.test(phone)
 }
 
 /**
  * Determines if a password is valid.
- * 
+ *
  * @param {string} password - The password to validate.
  * @return {boolean} - True if the password is valid, false otherwise.
  *
@@ -29,12 +29,12 @@ export function isPhone(phone: string): boolean {
  * ```
  */
 export function isPassword(password: string): boolean {
-    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{6,32}$/.test(password)
+  return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{6,32}$/.test(password)
 }
 
 /**
  * Determines if a UUID is valid.
- * 
+ *
  * @param {string} uuid - The UUID to validate.
  * @return {boolean} - True if the UUID is valid, false otherwise.
  *
@@ -46,5 +46,5 @@ export function isPassword(password: string): boolean {
  * ```
  */
 export function isUuid(uuid: string): boolean {
-    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(uuid)
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(uuid)
 }
