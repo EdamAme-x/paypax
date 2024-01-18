@@ -1,7 +1,11 @@
 export const PayPayStatus = {
   LoginSuccess: 'LoginSuccess',
-  LoginNeedOTP: 'LoginNeedOTP',
-  LoginFailOTP: 'LoginFailOTP',
   LoginFailed: 'LoginFailed',
+  LoginNeedOTP: 'LoginNeedOTP',
+  LoginDontNeedOTP: 'LoginDontNeedOTP',
+  OTPLoginSuccess: 'OTPLoginSuccess',
+  OTPLoginFail: 'OTPLoginFail',
   LoginAlreadySuccess: 'LoginAlreadySuccess',
+  RequestSuccess: 'RequestSuccess',
+  RequestFailed: 'RequestFailed',
 }

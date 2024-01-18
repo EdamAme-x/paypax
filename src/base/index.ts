@@ -5,10 +5,12 @@ import type {
   OTP,
   ResponseBalance,
   ResponseBody,
+  ResponseFail,
+  ResponseUserInfo,
   baseHeader,
   loginResult,
 } from '../types'
-import { parseBalanceContext, parseCookieFromMap } from '../utils/parse'
+import { parseBalanceContext, parseCookieFromMap, parseUserInfoContext } from '../utils/parse'
 
 export class PayPay {
   phone: string = ''
@@ -46,6 +48,7 @@ export class PayPay {
       return {
         success: true,
         status: 'LoginAlreadySuccess',
+        context: {},
       }
     }
 
@@ -56,6 +59,7 @@ export class PayPay {
       return {
         success: true,
         status: 'LoginSuccess',
+        context: {},
       }
     }
 
@@ -67,6 +71,7 @@ export class PayPay {
         return {
           success: false,
           status: 'LoginFailed',
+          context: {},
         }
       }
     } else {
@@ -98,12 +103,18 @@ export class PayPay {
       return {
         success: true,
         status: 'LoginSuccess',
+        context: {
+          result,
+        },
       }
     } else {
       if (result['response_type'] === 'ErrorResponse') {
         return {
           success: false,
           status: 'LoginFailed',
+          context: {
+            result,
+          },
         }
       } else {
         this.otp = {
@@ -114,6 +125,10 @@ export class PayPay {
         return {
           success: false,
           status: 'LoginNeedOTP',
+          context: {
+            result,
+            otp: Object.create(this.otp),
+          },
         }
       }
     }
@@ -124,6 +139,14 @@ export class PayPay {
   }
 
   async otpLogin(otp: string): Promise<loginResult> {
+    if (this.isLogged()) {
+      return {
+        success: true,
+        status: 'LoginAlreadySuccess',
+        context: {},
+      }
+    }
+
     if (this.otp.waiting) {
       const ctx = {
         scope: 'SIGN_IN',
@@ -154,25 +177,25 @@ export class PayPay {
         this.cookie.set('token', result.access_token)
         return {
           success: true,
-          status: 'LoginSuccess',
+          status: 'OTPLoginSuccess',
+          context: {
+            result,
+          },
         }
       } else {
         return {
           success: false,
-          status: 'LoginFailOTP',
+          status: 'OTPLoginFail',
+          context: {
+            result,
+          },
         }
       }
     } else {
-      if (this.isLogged()) {
-        return {
-          success: true,
-          status: 'LoginAlreadySuccess',
-        }
-      } else {
-        return {
-          success: false,
-          status: 'LoginFailed',
-        }
+      return {
+        success: false,
+        status: 'LoginDontNeedOTP',
+        context: {},
       }
     }
   }
@@ -185,7 +208,14 @@ export class PayPay {
     }
   }
 
-  async getBalance(): Promise<ResponseBalance | undefined> {
+  async getBalance(): Promise<ResponseBalance | ResponseFail> {
+    if (!this.isLogged()) {
+      return {
+        success: false,
+        status: 'DontLoggedYet',
+      }
+    }
+
     const response = await fetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
       method: 'GET',
       headers: {
@@ -195,11 +225,41 @@ export class PayPay {
     })
 
     if (!response.ok) {
-      return undefined
+      return {
+        success: false,
+        status: 'RequestFailed',
+      }
     }
 
     const result = await response.json()
 
     return parseBalanceContext(result)
+  }
+
+  async getUserInfo(): Promise<ResponseUserInfo | ResponseFail> {
+    if (!this.isLogged()) {
+      return {
+        success: false,
+        status: 'DontLoggedYet',
+      }
+    }
+
+    const response = await fetch('https://www.paypay.ne.jp/app/v1/getUserProfile', {
+      method: 'GET',
+      headers: {
+        ...this.header,
+        cookie: parseCookieFromMap(this.cookie),
+      },
+    })
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: 'RequestFailed',
+      }
+    }
+
+    const result = await response.json()
+    return parseUserInfoContext(result)
   }
 }

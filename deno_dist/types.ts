@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Anyone = any
+
 export type baseHeader = {
   Accept: string
   'User-Agent': string
@@ -7,6 +10,7 @@ export type baseHeader = {
 export type loginResult = {
   success: boolean
   status: string
+  context: Record<string, Anyone>
 }
 
 export type OTP = {
@@ -25,23 +29,48 @@ export type FetchContext = {
   body?: string
 }
 
-export type ResponseBody = any & {}
+export type ResponseBody = Anyone & {}
+
+export type ResponseFail = {
+  success: false
+  status: string
+}
 
 export type ResponseBalance = {
-    success: true,
-    total: number,
-    currency: 'JPY' | string,
-    updated_at: string,
-    raw: {
-        header: {
-            resultCode: string,
-            resultMessage: string
-        },
-        payload: {
-            walletSummary: any,
-            walletDetail: any,
-            walletDescription: any,
-            [key: string]: string | boolean
-        }
+  success: true
+  total: number
+  currency: 'JPY' | string
+  updated_at: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
     }
+    payload: {
+      [key: string]: Anyone
+    }
+  }
+}
+
+export type ResponseUserInfo = {
+  success: true
+  id: number
+  user_id: string
+  state: string
+  first_name: string
+  last_name: string
+  display_name: string
+  icon_url: string
+  phone_number: string
+  email: string
+  date_of_birth: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
+    }
+    payload: {
+      [key: string]: Anyone
+    }
+  }
 }
