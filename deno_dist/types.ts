@@ -7,10 +7,10 @@ export type baseHeader = {
   'Content-Type': string
 }
 
-export type loginResult = {
+export type loginResult<T = Record<string, Anyone>> = {
   success: boolean
   status: string
-  context: Record<string, Anyone>
+  context: T
 }
 
 export type OTP = {
