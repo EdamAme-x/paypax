@@ -31,7 +31,7 @@
     "url": "https://github.com/EdamAme-x/paypay.x.js.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org"
   },
   "homepage": "https://paypayjs.ame-x.net",
   "dependencies": {
