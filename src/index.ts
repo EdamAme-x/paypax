@@ -1,3 +1,7 @@
 export { PayPay } from './base'
 export { PayPayError } from './erorr'
 export * from './utils/is'
+export * from './utils/parse'
+export * from './types'
+export * from './status'
+export * from './headers'

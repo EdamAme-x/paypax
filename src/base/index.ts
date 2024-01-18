@@ -1,6 +1,14 @@
 import { PayPayError, isPassword, isPhone, isUuid } from '..'
 import { createHeader } from '../headers'
-import type { LoginContext, OTP, baseHeader, loginResult } from '../types'
+import type {
+  FetchContext,
+  LoginContext,
+  OTP,
+  ResponseBody,
+  baseHeader,
+  loginResult,
+} from '../types'
+import { parseCookieFromMap } from '../utils/parse'
 
 export class PayPay {
   phone: string = ''
@@ -8,7 +16,7 @@ export class PayPay {
   uuid: string | undefined
   token: string | undefined
   header: baseHeader = createHeader()
-  cookie = {}
+  cookie = new Map<string, string>()
 
   // is Logged
   logged: boolean = false
@@ -18,7 +26,7 @@ export class PayPay {
     waiting: false,
     otp_prefix: '',
     otp_ref_id: '',
-  } 
+  }
 
   constructor(phone: string, password: string) {
     if (isPhone(phone)) {
@@ -33,17 +41,22 @@ export class PayPay {
     }
   }
 
-  async login({
-    uuid,
-    token
-  }: LoginContext): Promise<loginResult | undefined> {
+  async login({ uuid, token }: LoginContext = {}): Promise<loginResult> {
+    if (this.isLogged()) {
+      return {
+        success: true,
+        status: 'LoginAlreadySuccess',
+      }
+    }
+
     if (token) {
-        this.token = token
-        this.logged = true
-        return {
-            success: true,
-            status: 'LoginSuccess'
-        }
+      this.token = token
+      this.logged = true
+      this.cookie.set('token', token)
+      return {
+        success: true,
+        status: 'LoginSuccess',
+      }
     }
 
     if (uuid) {
@@ -51,53 +64,120 @@ export class PayPay {
         this.uuid = uuid
       } else {
         new PayPayError('UUID is not valid', 0)
+        return {
+          success: false,
+          status: 'LoginFailed',
+        }
       }
-    }else {
-        this.uuid = crypto.randomUUID()
+    } else {
+      this.uuid = crypto.randomUUID()
     }
 
     const ctx = {
-        'scope':'SIGN_IN',
-        'client_uuid': this.uuid,
-        'grant_type':'password',
-        'username': this.phone,
-        'password': this.password,
-        'add_otp_prefix': true,
-        'language':'ja'
+      scope: 'SIGN_IN',
+      client_uuid: this.uuid,
+      grant_type: 'password',
+      username: this.phone,
+      password: this.password,
+      add_otp_prefix: true,
+      language: 'ja',
     }
 
     const response = await fetch('https://www.paypay.ne.jp/app/v1/oauth/token', {
-        method: 'POST',
-        headers: this.header,
-        body: JSON.stringify(ctx),
+      method: 'POST',
+      headers: this.header,
+      body: JSON.stringify(ctx),
     })
 
-    const result = await response.json()
+    const result: ResponseBody = await response.json()
 
     if ('access_token' in result) {
+      this.token = result.access_token
+      this.logged = true
+      this.cookie.set('token', result.access_token)
+      return {
+        success: true,
+        status: 'LoginSuccess',
+      }
+    } else {
+      if (result['response_type'] === 'ErrorResponse') {
+        return {
+          success: false,
+          status: 'LoginFailed',
+        }
+      } else {
+        this.otp = {
+          waiting: true,
+          otp_prefix: result['otp_prefix'],
+          otp_ref_id: result['otp_reference_id'],
+        }
+        return {
+          success: false,
+          status: 'LoginNeedOTP',
+        }
+      }
+    }
+  }
+
+  isLogged(): boolean {
+    return this.logged
+  }
+
+  async otpLogin(otp: string): Promise<loginResult> {
+    if (this.otp.waiting) {
+      const ctx = {
+        scope: 'SIGN_IN',
+        client_uuid: this.uuid,
+        grant_type: 'otp',
+        otp_prefix: this.otp.otp_prefix,
+        otp: otp,
+        otp_reference_id: this.otp.otp_ref_id,
+        username_type: 'MOBILE',
+        language: 'ja',
+      }
+
+      console.log(ctx)
+      console.log(parseCookieFromMap(this.cookie))
+
+      const response = await fetch('https://www.paypay.ne.jp/app/v1/oauth/token', {
+        method: 'POST',
+        headers: {
+          ...this.header,
+          'Content-Type': 'application/json',
+          cookie: parseCookieFromMap(this.cookie),
+        },
+        body: JSON.stringify(ctx),
+      })
+
+      const result: ResponseBody = await response.json()
+      console.log(result)
+
+      if ('access_token' in result) {
         this.token = result.access_token
         this.logged = true
+        this.cookie.set('token', result.access_token)
         return {
-            success: true,
-            status: 'LoginSuccess'
+          success: true,
+          status: 'LoginSuccess',
         }
+      } else {
+        return {
+          success: false,
+          status: 'LoginFailOTP',
+        }
+      }
     } else {
-        if (result['response_type'] === 'ErrorResponse') {
-            return {
-                success: false,
-                status: 'LoginFailed'
-            }
-        }else {
-            this.otp = {
-                waiting: true,
-                otp_prefix: result['otp_prefix'],
-                otp_ref_id: result['otp_reference_id'],
-            }
-            return {
-                success: false,
-                status: 'LoginNeedOTP'
-            }
+      if (this.isLogged()) {
+        return {
+          success: true,
+          status: 'LoginAlreadySuccess',
         }
+      } else {
+        return {
+          success: false,
+          status: 'LoginFailed',
+        }
+      }
     }
   }
 
@@ -107,5 +187,20 @@ export class PayPay {
     } else {
       new PayPayError('Not logged in yet.', 0)
     }
+  }
+
+  async balance(): Promise<ResponseBody> {
+    // balance=self.session.get("https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo",headers=headers,proxies=self.proxy)
+    // return balance.json()
+
+    const response = await fetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
+      method: 'GET',
+      headers: {
+        ...this.header,
+        cookie: parseCookieFromMap(this.cookie),
+      },
+    })
+
+    return await response.json()
   }
 }

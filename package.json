@@ -27,6 +27,7 @@
     "denoify": "^1.6.9",
     "esbuild": "^0.15.12",
     "glob": "^8.1.0",
+    "node-fetch": "^3.3.2",
     "rimraf": "^5.0.5",
     "tsx": "^4.7.0",
     "vitest": "^1.2.1"
@@ -45,5 +46,6 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "main": "dist/index.js"
+  "main": "dist/index.js",
+  "type": "module"
 }
