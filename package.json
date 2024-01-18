@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Library for automate PayPay operations",
   "scripts": {
-    "denoify": "rimraf deno_dist && denoify",
     "format": "prettier --write ./src/*.{ts,tsx} ./src/**/*.{ts,tsx}",
     "lint": "eslint --ext js,ts src",
-    "lint:fix": "eslint --ext js,ts src --fix"
+    "lint:fix": "eslint --ext js,ts src --fix",
+    "build": "rimraf dist && tsx ./build.ts",
+    "build:deno": "rimraf deno_dist && denoify",
+    "build:all": "pnpm build && pnpm build:deno"
   },
   "keywords": [
     "paypay",
@@ -19,9 +21,10 @@
   "devDependencies": {
     "@hono/eslint-config": "^0.0.3",
     "denoify": "^1.6.9",
-    "esbuild": "^0.19.11",
-    "glob": "^10.3.10",
-    "rimraf": "^5.0.5"
+    "esbuild": "^0.15.12",
+    "glob": "^8.1.0",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.7.0"
   },
   "repository": {
     "type": "git",
@@ -33,5 +36,8 @@
   "homepage": "https://paypayjs.ame-x.net",
   "dependencies": {
     "arg": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

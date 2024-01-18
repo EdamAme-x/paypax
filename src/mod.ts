@@ -1,1 +1,2 @@
-// ENTRY POINT
+// DENO ENTRY POINT
+export * from './base'

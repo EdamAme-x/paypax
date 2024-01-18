@@ -1,0 +1,1 @@
+export { PayPay } from './base'

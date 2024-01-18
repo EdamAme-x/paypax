@@ -7,6 +7,7 @@
 
 import { exec } from 'child_process'
 import fs from 'fs'
+import * as fsp from 'fs/promises'
 import path from 'path'
 import arg from 'arg'
 import { build } from 'esbuild'
@@ -20,7 +21,7 @@ const args = arg({
 const isWatch = args['--watch'] || false
 
 const entryPoints = glob.sync('./src/**/*.ts', {
-  ignore: ['./src/**/*.test.ts', './src/mod.ts', './src/middleware.ts', './src/deno/**/*.ts'],
+  ignore: ['./src/**/*.test.ts', './src/mod.ts'],
 })
 
 /*
@@ -78,3 +79,20 @@ const esmBuild = () =>
 Promise.all([esmBuild(), cjsBuild()])
 
 exec(`tsc ${isWatch ? '-w' : ''} --emitDeclarationOnly --declaration --project tsconfig.build.json`)
+
+async function copyFile(source, destination) {
+  try {
+    const data = await fsp.readFile(source)
+    await fsp.writeFile(destination, data)
+    console.log(`${source} を ${destination} にコピーしました。`)
+  } catch (error) {
+    console.error(`ファイルのコピー中にエラーが発生しました: ${error}`)
+  }
+}
+
+const sourcePath = './package.cjs.json'
+const distCjsPath = './dist/cjs/package.json'
+const distTypesPath = './dist/types/package.json'
+
+copyFile(sourcePath, distCjsPath)
+copyFile(sourcePath, distTypesPath)
