@@ -8,6 +8,7 @@ import type {
   ResponseBalance,
   ResponseBody,
   ResponseCreateLink,
+  ResponseGetLink,
   ResponseUserInfo,
   baseHeader,
   loginResult,
@@ -18,6 +19,7 @@ import {
   parseCookieFromMap,
   parseUserInfoContext,
   parseCreateLink,
+  parseGetLink,
 } from '../utils/parse.ts'
 
 export class PayPay {
@@ -289,5 +291,25 @@ export class PayPay {
 
     return parseCreateLink(result)
   }
-  // Sub
+  
+  async getLink(link: string): Promise<ResponseGetLink> {
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 0).fire()
+    }
+
+    const code = link.split('/').pop()
+
+    const { response, result } = await this.baseFetch(
+      `https://www.paypay.ne.jp/app/v2/p2p-api/getP2PLinkInfo?verificationCode=${code}`,
+      {
+        method: 'GET',
+      }
+    )
+
+    if (!response.ok) {
+      new PayPayError('Request failed', 0).fire()
+    }
+
+    return parseGetLink(result)
+  }
 }

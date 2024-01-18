@@ -1,4 +1,4 @@
-import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseUserInfo } from '../index.ts'
+import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseUserInfo } from '../index.ts'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -29,6 +29,7 @@ export function parseUserInfoContext(result: Anyone): ResponseUserInfo {
     phone_number: result.payload.mobile,
     email: result.payload.email,
     date_of_birth: result.payload.date_of_birth,
+    external_id: result.payload.external_id,
     raw: result,
   }
 }
@@ -41,6 +42,26 @@ export function parseCreateLink(result: Anyone): ResponseCreateLink {
     link: result.payload.link,
     transactionAt: result.payload.transactionAt,
     expiry: result.payload.expiry,
+    raw: result,
+  }
+}
+
+export function parseGetLink(result: Anyone): ResponseGetLink {
+  return {
+    success: true,
+    orderId: result.payload.pendingP2PInfo.orderId,
+    orderType: result.payload.pendingP2PInfo.orderType,
+    description: result.payload.pendingP2PInfo.description,
+    imageUrl: result.payload.pendingP2PInfo.imageUrl,
+    amount: result.payload.pendingP2PInfo.amount,
+    link: result.payload.pendingP2PInfo.link,
+    isSetPasscode: result.payload.pendingP2PInfo.isSetPasscode,
+    createdAt: result.payload.pendingP2PInfo.createdAt,
+    acceptedAt: result.payload.pendingP2PInfo.acceptedAt,
+    money_type: result.payload.pendingP2PInfo.moneyPriorit,
+    sender_name: result.payload.sender.displayName,
+    sender_external_id: result.payload.sender.externalId,
+    photo_url: result.payload.sender.photoUrl,
     raw: result,
   }
 }

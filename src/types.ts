@@ -78,6 +78,7 @@ export type ResponseUserInfo = {
   phone_number: string
   email: string
   date_of_birth: string
+  external_id: string
   raw: {
     header: {
       resultCode: string
@@ -96,6 +97,32 @@ export type ResponseCreateLink = {
   link: string
   transactionAt: string
   expiry: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
+    }
+    payload: {
+      [key: string]: string
+    }
+  }
+}
+
+export type ResponseGetLink = {
+  success: true
+  orderId: string
+  orderType: string
+  description: string
+  imageUrl: string
+  amount: number
+  link: string
+  isSetPasscode: boolean
+  createdAt: string
+  acceptedAt: string
+  money_type: string
+  sender_name: string
+  sender_external_id: string
+  photo_url: string
   raw: {
     header: {
       resultCode: string
