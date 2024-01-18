@@ -1,5 +1,5 @@
 {
-  "name": "paypay-js",
+  "name": "paypay",
   "version": "1.0.0",
   "description": "Library for automate PayPay operations",
   "scripts": {
