@@ -8,9 +8,17 @@ for Node.js, Deno, Bun (all :) )
 
 https://www.npmjs.com/package/paypay.x.js
 
-### TODO
-- Type Fix
-- ReName
+### Features
+- Fastest
+- Multi Platform (Node.js, Deno, Bun...)
+- Easy
+- Strict Error
+- feats
+    - getBalance
+    - getUserInfo
+    - createLink
+    - getLink
+    - receiveLink
 
 ### Installation
 

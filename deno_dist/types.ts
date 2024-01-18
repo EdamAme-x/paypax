@@ -38,6 +38,19 @@ export type CreateLinkContext = {
   passcode?: string
 }
 
+export type ReceiveLinkContext = {
+  verificationCode: string
+  client_uuid: string
+  passcode: string
+  requestAt: string
+  requestId: string
+  orderId: string
+  senderMessageId: string
+  senderChannelUrl: string
+  iosMinimumVersion: string
+  androidMinimumVersion: string
+}
+
 export type FetchContext = {
   method: 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH' | 'OPTIONS' | 'HEAD' | 'TRACE' | 'CONNECT'
   body?: string
@@ -129,7 +142,23 @@ export type ResponseGetLink = {
       resultMessage: string
     }
     payload: {
-      [key: string]: string
+      [key: string]: Anyone
+    }
+  }
+}
+
+export type ResponseReceiveLink = {
+  success: true
+  messageId: string
+  chatRoomId: string
+  orderStatus: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
+    }
+    payload: {
+      [key: string]: Anyone
     }
   }
 }

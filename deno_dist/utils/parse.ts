@@ -1,4 +1,4 @@
-import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseUserInfo } from '../index.ts'
+import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseReceiveLink, ResponseUserInfo } from '../index.ts'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -62,6 +62,16 @@ export function parseGetLink(result: Anyone): ResponseGetLink {
     sender_name: result.payload.sender.displayName,
     sender_external_id: result.payload.sender.externalId,
     photo_url: result.payload.sender.photoUrl,
+    raw: result,
+  }
+}
+
+export function parseReceiveLink(result: Anyone): ResponseReceiveLink {
+  return {
+    success: true,
+    messageId: result.payload.messageId,
+    chatRoomId: result.payload.chatRoomId,
+    orderStatus: result.payload.orderStatus,
     raw: result,
   }
 }

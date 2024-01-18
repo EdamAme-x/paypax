@@ -5,10 +5,12 @@ import type {
   FetchContext,
   LoginContext,
   OTP,
+  ReceiveLinkContext,
   ResponseBalance,
   ResponseBody,
   ResponseCreateLink,
   ResponseGetLink,
+  ResponseReceiveLink,
   ResponseUserInfo,
   baseHeader,
   loginResult,
@@ -20,6 +22,7 @@ import {
   parseUserInfoContext,
   parseCreateLink,
   parseGetLink,
+  parseReceiveLink,
 } from '../utils/parse'
 
 export class PayPay {
@@ -234,7 +237,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0).fire()
+      new PayPayError('Get balance failed', 0).fire()
     }
 
     return parseBalanceContext(result)
@@ -253,15 +256,19 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0).fire()
+      new PayPayError('Get user info failed', 0).fire()
     }
 
     return parseUserInfoContext(result)
   }
 
-  async createLink(amount: number, password?: string): Promise<ResponseCreateLink> {
+  async createLink(amount: number, passcode?: string): Promise<ResponseCreateLink> {
     if (!this.isLogged()) {
       new PayPayError('Do not logged in', 0).fire()
+    }
+
+    if (amount < 1) {
+      new PayPayError('Amount must be greater than 0', 0).fire()
     }
 
     const ctx: CreateLinkContext = {
@@ -273,8 +280,8 @@ export class PayPay {
       iosMinimumVersion: '3.45.0',
     }
 
-    if (password) {
-      ctx.passcode = password
+    if (passcode) {
+      ctx.passcode = passcode
     }
 
     const { response, result } = await this.baseFetch(
@@ -286,7 +293,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0).fire()
+      new PayPayError('Create link failed', 0).fire()
     }
 
     return parseCreateLink(result)
@@ -307,9 +314,48 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0).fire()
+      new PayPayError('Link is not found', 0).fire()
     }
 
     return parseGetLink(result)
+  }
+
+  async receiveLink(link: string, passcode?: string): Promise<ResponseReceiveLink | undefined> {
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 0).fire()
+    }
+
+    try {
+      const info = await this.getLink(link)
+
+      const ctx: ReceiveLinkContext = {
+        verificationCode: link.split('/').pop() ?? '',
+        client_uuid: this.uuid ?? crypto.randomUUID(),
+        passcode: passcode ?? '2189',
+        requestAt: new Date().toISOString(),
+        requestId: info.raw.payload.message.data.requestId,
+        orderId: info.raw.payload.message.data.orderId,
+        senderMessageId: info.raw.payload.message.messageId,
+        senderChannelUrl: info.raw.payload.message.chatRoomId,
+        iosMinimumVersion: '3.45.0',
+        androidMinimumVersion: '3.45.0',
+      }
+
+      const { response, result } = await this.baseFetch(
+        'https://www.paypay.ne.jp/app/v2/p2p-api/acceptP2PSendMoneyLink',
+        {
+          method: 'POST',
+          body: JSON.stringify(ctx),
+        }
+      )
+
+      if (!response.ok) {
+        new PayPayError('Receive link failed', 0).fire()
+      }
+
+      return parseReceiveLink(result)
+    }catch (_e) {
+      new PayPayError('Invalid link', 0).fire()
+    }
   }
 }
