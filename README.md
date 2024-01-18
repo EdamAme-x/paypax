@@ -26,7 +26,7 @@ import PayPay from "https://deno.land/x/paypayjs/mod.ts"
 ```
 
 ## Docs
-... (WIP)
+[https://github.com/EdamAme-x/paypay.js/discussions/2](https://github.com/EdamAme-x/paypay.js/discussions/2)
 
 ## PullRequest
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
