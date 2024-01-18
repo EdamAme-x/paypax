@@ -30,5 +30,8 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "homepage": "https://paypayjs.ame-x.net"
+  "homepage": "https://paypayjs.ame-x.net",
+  "dependencies": {
+    "arg": "^5.0.2"
+  }
 }
