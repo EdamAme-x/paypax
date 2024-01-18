@@ -41,11 +41,11 @@ export class PayPay {
 
   constructor(phone: string, password: string) {
     if (!isPhone(phone)) {
-      new PayPayError('Phone is not valid', 0)
+      new PayPayError('Phone is not valid', 0).fire()
     }
 
     if (!isPassword(password)) {
-      new PayPayError('Password is not valid', 0)
+      new PayPayError('Password is not valid', 0).fire()
     }
 
     this.phone = phone
@@ -76,7 +76,7 @@ export class PayPay {
       if (isUuid(uuid)) {
         this.uuid = uuid
       } else {
-        new PayPayError('UUID is not valid', 0)
+        new PayPayError('UUID is not valid', 0).fire()
 
         return this.createLoginResult(false, 'LoginFailed')
       }
@@ -175,7 +175,7 @@ export class PayPay {
     if (this.uuid) {
       return this.uuid
     } else {
-      new PayPayError('Not logged in yet.', 0)
+      new PayPayError('Not logged in yet.', 0).fire()
     }
   }
 
@@ -221,7 +221,7 @@ export class PayPay {
   // Main
   async getBalance(): Promise<ResponseBalance> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0)
+      new PayPayError('Do not logged in', 0).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -232,7 +232,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0)
+      new PayPayError('Request failed', 0).fire()
     }
 
     return parseBalanceContext(result)
@@ -240,7 +240,7 @@ export class PayPay {
 
   async getUserInfo(): Promise<ResponseUserInfo> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0)
+      new PayPayError('Do not logged in', 0).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -251,7 +251,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0)
+      new PayPayError('Request failed', 0).fire()
     }
 
     return parseUserInfoContext(result)
@@ -259,7 +259,7 @@ export class PayPay {
 
   async createLink(amount: number, password?: string): Promise<ResponseCreateLink> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0)
+      new PayPayError('Do not logged in', 0).fire()
     }
 
     const ctx: CreateLinkContext = {
@@ -284,7 +284,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Request failed', 0)
+      new PayPayError('Request failed', 0).fire()
     }
 
     return parseCreateLink(result)
