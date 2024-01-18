@@ -1,6 +1,7 @@
 import { PayPayError, isPassword, isPhone, isUuid } from '..'
 import { createHeader } from '../headers'
 import type {
+  FetchContext,
   LoginContext,
   OTP,
   ResponseBalance,
@@ -169,6 +170,18 @@ export class PayPay {
     }
   }
 
+  async baseFetch(url: string, ctx: FetchContext): Promise<ResponseBody> {
+    const response = await fetch(url, {
+      headers: {
+        ...this.header,
+        cookie: parseCookieFromMap(this.cookie),
+      },
+      ...ctx
+    })
+
+    return response
+  }
+
   async getBalance(): Promise<ResponseBalance | ResponseFail> {
     if (!this.isLogged()) {
       return {
@@ -177,12 +190,8 @@ export class PayPay {
       }
     }
 
-    const response = await fetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
+    const response = await this.baseFetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
       method: 'GET',
-      headers: {
-        ...this.header,
-        cookie: parseCookieFromMap(this.cookie),
-      },
     })
 
     if (!response.ok) {
@@ -205,12 +214,8 @@ export class PayPay {
       }
     }
 
-    const response = await fetch('https://www.paypay.ne.jp/app/v1/getUserProfile', {
+    const response = await this.baseFetch('https://www.paypay.ne.jp/app/v1/getUserProfile', {
       method: 'GET',
-      headers: {
-        ...this.header,
-        cookie: parseCookieFromMap(this.cookie),
-      },
     })
 
     if (!response.ok) {
