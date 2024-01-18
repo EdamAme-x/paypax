@@ -1,27 +1,29 @@
-# paypay.js
+# PayPay.js | PayPax
 PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
 
-for Node.js
+can call it either **PayPay.js** or **PayPax**.
 
-https://www.npmjs.com/package/paypayjs
+for Node.js, Deno, Bun (all :) )
+
+https://www.npmjs.com/package/paypay.x.js
 
 ### Installation
 
 - Node.js or Bun
 ```shell
-npm i --save-dev paypayjs
+npm i --save-dev paypay.x.js
 or
-yarn add -D paypayjs
+yarn add -D paypay.x.js
 or
-pnpm i -save-dev paypayjs
+pnpm i -save-dev paypay.x.js
 or
-bun i -D paypayjs
+bun i -D paypay.x.js
 ```
 
 - Deno
 ```typescript
-import PayPay from "https://deno.land/x/paypayjs/mod.ts"
+import { PayPay } from "https://deno.land/x/paypayjs/mod.ts"
 ...
 ```
 
