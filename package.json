@@ -10,7 +10,8 @@
     "build:deno": "rimraf deno_dist && denoify",
     "build:all": "pnpm build && pnpm build:deno",
     "release": "pnpm build:all && pnpm publish",
-    "test": "pnpx vitest --run"
+    "test": "vitest --run",
+    "test:type": "tsc --noEmit"
   },
   "keywords": [
     "paypay",

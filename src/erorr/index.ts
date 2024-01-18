@@ -1,10 +1,19 @@
 export class PayPayError {
+    public message: string = 'Unknown'
+    public code: number = 0
+
     constructor(
-        private message: string,
-        private code: number
-    ) {}
+        message: string,
+        code: number
+    ) {
+        if (code >= 0) {
+            this.message = message
+            this.code = code
+        }
+    }
 
     fire() {
-        throw new Error(`PayPayError: ${this.message} [${this.code}] from paypay.x.js`)
+        const { message, code } = this
+        throw new Error(`PayPayError [${code}] : ${message} from paypay.x.js`)
     }
 }
