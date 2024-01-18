@@ -4,7 +4,9 @@
   "description": "Library for automate PayPay operations",
   "scripts": {
     "denoify": "rimraf deno_dist && denoify",
-    "format": "prettier --write ./src/**/*.{ts}"
+    "format": "prettier --write ./src/**/*.{ts}",
+    "lint": "eslint --ext js,ts src",
+    "lint:fix": "eslint --ext js,ts src --fix"
   },
   "keywords": [
     "paypay",
@@ -18,5 +20,13 @@
     "@hono/eslint-config": "^0.0.3",
     "denoify": "^1.6.9",
     "rimraf": "^5.0.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdamAme-x/paypay.js.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "homepage": "https://paypayjs.ame-x.net"
 }
