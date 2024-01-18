@@ -8,6 +8,10 @@ for Node.js, Deno, Bun (all :) )
 
 https://www.npmjs.com/package/paypay.x.js
 
+### TODO
+- Type Fix
+- ReName
+
 ### Installation
 
 - Node.js or Bun
