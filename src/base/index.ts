@@ -180,7 +180,7 @@ export class PayPay {
     if (this.uuid) {
       return this.uuid
     } else {
-      new PayPayError('Not logged in yet.', 0).fire()
+      new PayPayError('Not logged in yet.', 2).fire()
     }
   }
 
@@ -226,7 +226,7 @@ export class PayPay {
   // Main
   async getBalance(): Promise<ResponseBalance> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0).fire()
+      new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -237,7 +237,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Get balance failed', 0).fire()
+      new PayPayError('Get balance failed', 1).fire()
     }
 
     return parseBalanceContext(result)
@@ -245,7 +245,7 @@ export class PayPay {
 
   async getUserInfo(): Promise<ResponseUserInfo> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0).fire()
+      new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -256,7 +256,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Get user info failed', 0).fire()
+      new PayPayError('Get user info failed', 1).fire()
     }
 
     return parseUserInfoContext(result)
@@ -264,11 +264,11 @@ export class PayPay {
 
   async createLink(amount: number, passcode?: string): Promise<ResponseCreateLink> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0).fire()
+      new PayPayError('Do not logged in', 2).fire()
     }
 
     if (amount < 1) {
-      new PayPayError('Amount must be greater than 0', 0).fire()
+      new PayPayError('Amount must be greater than 0', 1).fire()
     }
 
     const ctx: CreateLinkContext = {
@@ -293,7 +293,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Create link failed', 0).fire()
+      new PayPayError('Create link failed', 1).fire()
     }
 
     return parseCreateLink(result)
@@ -301,7 +301,7 @@ export class PayPay {
   
   async getLink(link: string): Promise<ResponseGetLink> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0).fire()
+      new PayPayError('Do not logged in', 2).fire()
     }
 
     const code = link.split('/').pop()
@@ -314,7 +314,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Link is not found', 0).fire()
+      new PayPayError('Link is not found', 1).fire()
     }
 
     return parseGetLink(result)
@@ -322,7 +322,7 @@ export class PayPay {
 
   async receiveLink(link: string, passcode?: string): Promise<ResponseReceiveLink | undefined> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 0).fire()
+      new PayPayError('Do not logged in', 2).fire()
     }
 
     try {
@@ -350,12 +350,12 @@ export class PayPay {
       )
 
       if (!response.ok) {
-        new PayPayError('Receive link failed', 0).fire()
+        new PayPayError('Receive link failed', 1).fire()
       }
 
       return parseReceiveLink(result)
     }catch (_e) {
-      new PayPayError('Invalid link', 0).fire()
+      new PayPayError('Invalid link', 1).fire()
     }
   }
 }

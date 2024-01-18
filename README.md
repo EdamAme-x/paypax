@@ -44,8 +44,15 @@ import { PayPay } from "https://deno.land/x/paypayjs/mod.ts"
 [example](./example) ディレクトリのコードを見てください。
 
 ### Error 0番
-ライブラリのエラー
+ライブラリの初期化エラー
 電話番号、パスワード、UUIDの形式の何れかが間違っている
+
+### Error 1番
+ライブラリのメソッドエラー
+リンクが存在しない等
+
+### Error 2番
+初期化(ログイン)が終わっていないと実行できないメソッドを実行している。
 
 ## PullRequest
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
