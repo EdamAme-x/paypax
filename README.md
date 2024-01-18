@@ -19,6 +19,8 @@ https://www.npmjs.com/package/paypay.x.js
     - createLink
     - getLink
     - receiveLink
+    - sendMoney
+    - and more (History, payments...)
 
 ### Installation
 

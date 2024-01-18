@@ -51,6 +51,16 @@ export type ReceiveLinkContext = {
   androidMinimumVersion: string
 }
 
+export type SendMoneyContext = {
+  theme: string,
+  externalReceiverId: string,
+  amount: number,
+  requestId: string,
+  requestAt: string,
+  iosMinimumVersion: string,
+  androidMinimumVersion: string
+}
+
 export type FetchContext = {
   method: 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH' | 'OPTIONS' | 'HEAD' | 'TRACE' | 'CONNECT'
   body?: string

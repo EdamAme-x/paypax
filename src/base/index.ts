@@ -12,6 +12,7 @@ import type {
   ResponseGetLink,
   ResponseReceiveLink,
   ResponseUserInfo,
+  SendMoneyContext,
   baseHeader,
   loginResult,
   loginResultStatus,
@@ -304,6 +305,10 @@ export class PayPay {
       new PayPayError('Do not logged in', 2).fire()
     }
 
+    if (!link.includes('pay.paypay.ne.jp') || link.trim() === '') {
+      new PayPayError('Invalid link', 1).fire()
+    }
+
     const code = link.split('/').pop()
 
     const { response, result } = await this.baseFetch(
@@ -323,6 +328,14 @@ export class PayPay {
   async receiveLink(link: string, passcode?: string): Promise<ResponseReceiveLink | undefined> {
     if (!this.isLogged()) {
       new PayPayError('Do not logged in', 2).fire()
+    }
+
+    if (passcode && passcode.length !== 4) {
+      new PayPayError('Passcode must be 4 digits', 1).fire()
+    }
+
+    if (!link.includes('pay.paypay.ne.jp') || link.trim() === '') {
+      new PayPayError('Invalid link', 1).fire()
     }
 
     try {
@@ -356,6 +369,74 @@ export class PayPay {
       return parseReceiveLink(result)
     }catch (_e) {
       new PayPayError('Invalid link', 1).fire()
+    }
+  }
+
+  async sendMoney(amount: number, external_id: string): Promise<ResponseBody> {
+
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 2).fire()
+    }
+
+    if (amount < 1) {
+      new PayPayError('Amount must be greater than 0', 1).fire()
+    }
+
+    if (!external_id || external_id.trim() === '') {
+      new PayPayError('External id is required', 1).fire()
+    }
+
+    const ctx: SendMoneyContext = {
+      theme: 'default-sendmoney',
+      externalReceiverId: external_id,
+      amount: amount,
+      requestId: crypto.randomUUID(),
+      requestAt: new Date().toISOString(),
+      iosMinimumVersion: '3.45.0',
+      androidMinimumVersion: '3.45.0',
+    }
+
+    const { response, result } = await this.baseFetch(
+      'https://www.paypay.ne.jp/app/v2/p2p-api/executeP2PSendMoney',
+      {
+        method: 'POST',
+        body: JSON.stringify(ctx), 
+      }
+    )
+
+    if (!response.ok) {
+      new PayPayError('Send money failed', 1).fire()
+    }
+
+    if (result.header.resultCode === 'S9999') {
+      new PayPayError('You\'re not friends with user', 1).fire()
+    }
+
+    return {
+      success: true,
+      ...result.payload,
+      raw: result
+    }
+  }
+
+  async request(path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList') {
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 2).fire()
+    }
+
+    const { response, result } = await this.baseFetch(
+      `https://www.paypay.ne.jp/app/v2/bff/${path}`,
+    {
+      method: 'GET'
+    })
+
+    if (!response.ok) {
+      new PayPayError('Request path failed', 1).fire()
+    }
+
+    return {
+      success: true,
+      raw: result
     }
   }
 }
