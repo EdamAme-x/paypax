@@ -24,12 +24,12 @@ jobs:
           scope: '@EdamAme-x'
 
       - name: Install
-        run: pnpm install
+        run: npm install
 
       - name: Build
-        run: pnpm build
+        run: npm build
 
       - name: Publish npm package
-        run: pnpm publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
