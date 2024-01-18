@@ -1,6 +1,7 @@
 import { PayPayError, isPassword, isPhone, isUuid } from '../index.ts'
 import { createHeader } from '../headers/index.ts'
 import type {
+  CreateLinkContext,
   FetchContext,
   LoginContext,
   OTP,
@@ -257,15 +258,11 @@ export class PayPay {
   }
 
   async createLink(amount: number, password?: string): Promise<ResponseCreateLink> {
-    const ctx: {
-      androidMinimumVersion: string;
-      requestId: string;
-      requestAt: string;
-      theme: string;
-      amount: number;
-      iosMinimumVersion: string;
-      passcode?: string;
-    } = {
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 0)
+    }
+
+    const ctx: CreateLinkContext = {
       androidMinimumVersion: '3.45.0',
       requestId: crypto.randomUUID(),
       requestAt: new Date().toISOString(),

@@ -28,6 +28,16 @@ export type LoginContext = {
   token?: string
 }
 
+export type CreateLinkContext = {
+  androidMinimumVersion: string;
+  requestId: string;
+  requestAt: string;
+  theme: string;
+  amount: number;
+  iosMinimumVersion: string;
+  passcode?: string;
+}
+
 export type FetchContext = {
   method: 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH' | 'OPTIONS' | 'HEAD' | 'TRACE' | 'CONNECT'
   body?: string
