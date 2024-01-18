@@ -1,4 +1,4 @@
-import { PayPayError, isPhone } from '..'
+import { PayPayError, isPassword, isPhone, isUuid } from '..'
 
 export class PayPay {
     phone: string = ''
@@ -14,9 +14,20 @@ export class PayPay {
         uuid?: string
     ) {
         if (isPhone(phone)) {
-            this.phone = phone
-            this.password = password
-            this.uuid = uuid
+            if (isPassword(password)) {
+                this.phone = phone
+                this.password = password
+
+                if (uuid) {
+                    if (isUuid(uuid)) {
+                        this.uuid = uuid
+                    }else {
+                        new PayPayError('UUID is not valid', 0)
+                    }
+                }
+            }else {
+                new PayPayError('Password is not valid', 0)
+            }
         }else {
             new PayPayError('Phone is not valid', 0)
         }
