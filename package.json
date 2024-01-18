@@ -1,6 +1,6 @@
 {
   "name": "paypay.x.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library for automate PayPay operations",
   "scripts": {
     "format": "prettier --write ./src/*.{ts,tsx} ./src/**/*.{ts,tsx}",
@@ -33,7 +33,7 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "homepage": "https://paypayjs.ame-x.net",
+  "homepage": "github.com/EdamAme-x/paypay.x.js",
   "dependencies": {
     "arg": "^5.0.2"
   },
