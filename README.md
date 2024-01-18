@@ -28,7 +28,10 @@ import { PayPay } from "https://deno.land/x/paypayjs/mod.ts"
 ```
 
 ## Docs
-[https://github.com/EdamAme-x/paypay.js/discussions/2](https://github.com/EdamAme-x/paypay.js/discussions/2)
+
+### Error 0番
+ライブラリのエラー
+電話番号、パスワード、UUIDの形式の何れかが間違っている
 
 ## PullRequest
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
