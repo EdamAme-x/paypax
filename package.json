@@ -9,7 +9,8 @@
     "build": "rimraf dist && tsx ./build.ts",
     "build:deno": "rimraf deno_dist && denoify",
     "build:all": "pnpm build && pnpm build:deno",
-    "release": "pnpm build:all && pnpm publish"
+    "release": "pnpm build:all && pnpm publish",
+    "test": "pnpx vitest --run"
   },
   "keywords": [
     "paypay",
@@ -25,7 +26,8 @@
     "esbuild": "^0.15.12",
     "glob": "^8.1.0",
     "rimraf": "^5.0.5",
-    "tsx": "^4.7.0"
+    "tsx": "^4.7.0",
+    "vitest": "^1.2.1"
   },
   "repository": {
     "type": "git",

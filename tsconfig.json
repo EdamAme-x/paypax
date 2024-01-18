@@ -10,7 +10,7 @@
     "skipLibCheck": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "jsx": "react",
     "jsxFactory": "jsx",
     "jsxFragmentFactory": "Fragment"
