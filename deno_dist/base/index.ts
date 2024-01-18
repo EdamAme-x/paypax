@@ -6,13 +6,18 @@ import type {
   OTP,
   ResponseBalance,
   ResponseBody,
-  ResponseFail,
+  ResponseCreateLink,
   ResponseUserInfo,
   baseHeader,
   loginResult,
   loginResultStatus,
 } from '../types.ts'
-import { parseBalanceContext, parseCookieFromMap, parseUserInfoContext } from '../utils/parse.ts'
+import {
+  parseBalanceContext,
+  parseCookieFromMap,
+  parseUserInfoContext,
+  parseCreateLink,
+} from '../utils/parse.ts'
 
 export class PayPay {
   phone: string = ''
@@ -21,6 +26,7 @@ export class PayPay {
   token: string | undefined
   header: baseHeader = createHeader()
   cookie = new Map<string, string>()
+  refresh_at: number = 0
 
   // is Logged
   logged: boolean = false
@@ -60,6 +66,7 @@ export class PayPay {
     if (token) {
       this.token = token
       this.logged = true
+      this.refresh_at = Date.now()
       this.cookie.set('token', token)
       return this.createLoginResult(true, 'LoginSuccess')
     }
@@ -97,12 +104,12 @@ export class PayPay {
     if ('access_token' in result) {
       this.token = result.access_token
       this.logged = true
+      this.refresh_at = Date.now()
       this.cookie.set('token', result.access_token)
 
       return this.createLoginResult(true, 'LoginSuccess')
     } else {
       if (result['response_type'] === 'ErrorResponse') {
-
         return this.createLoginResult(false, 'LoginFailed')
       } else {
         this.otp = {
@@ -110,7 +117,7 @@ export class PayPay {
           otp_prefix: result['otp_prefix'],
           otp_ref_id: result['otp_reference_id'],
         }
-        
+
         return this.createLoginResult(false, 'LoginNeedOTP')
       }
     }
@@ -152,6 +159,7 @@ export class PayPay {
       if ('access_token' in result) {
         this.token = result.access_token
         this.logged = true
+        this.refresh_at = Date.now()
         this.cookie.set('token', result.access_token)
         return this.createLoginResult(true, 'OTPLoginSuccess')
       } else {
@@ -170,62 +178,119 @@ export class PayPay {
     }
   }
 
-  async baseFetch(url: string, ctx: FetchContext): Promise<ResponseBody> {
+  async baseFetch(
+    url: string,
+    ctx: FetchContext
+  ): Promise<{
+    result: ResponseBody
+    response: Response
+  }> {
     const response = await fetch(url, {
       headers: {
         ...this.header,
         cookie: parseCookieFromMap(this.cookie),
       },
-      ...ctx
+      ...ctx,
     })
-
-    return response
-  }
-
-  async getBalance(): Promise<ResponseBalance | ResponseFail> {
-    if (!this.isLogged()) {
-      return {
-        success: false,
-        status: 'DontLoggedYet',
-      }
-    }
-
-    const response = await this.baseFetch('https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo', {
-      method: 'GET',
-    })
-
-    if (!response.ok) {
-      return {
-        success: false,
-        status: 'RequestFailed',
-      }
-    }
 
     const result = await response.json()
+
+    if (
+      'header' in result &&
+      'resultCode' in result['header'] &&
+      'resultMessage' in result['header']
+    ) {
+      if (
+        result['header']['resultCode'] === 'S0001' ||
+        result['header']['resultCode'] === 'S9999'
+      ) {
+        // Refresh
+        await this.login({
+          uuid: this.uuid,
+        })
+      }
+    }
+
+    return {
+      result,
+      response,
+    }
+  }
+
+  // Main
+  async getBalance(): Promise<ResponseBalance> {
+    if (!this.isLogged()) {
+      new PayPayError('Do not logged in', 0)
+    }
+
+    const { response, result } = await this.baseFetch(
+      'https://www.paypay.ne.jp/app/v1/bff/getBalanceInfo',
+      {
+        method: 'GET',
+      }
+    )
+
+    if (!response.ok) {
+      new PayPayError('Request failed', 0)
+    }
 
     return parseBalanceContext(result)
   }
 
-  async getUserInfo(): Promise<ResponseUserInfo | ResponseFail> {
+  async getUserInfo(): Promise<ResponseUserInfo> {
     if (!this.isLogged()) {
-      return {
-        success: false,
-        status: 'DontLoggedYet',
-      }
+      new PayPayError('Do not logged in', 0)
     }
 
-    const response = await this.baseFetch('https://www.paypay.ne.jp/app/v1/getUserProfile', {
-      method: 'GET',
-    })
+    const { response, result } = await this.baseFetch(
+      'https://www.paypay.ne.jp/app/v1/getUserProfile',
+      {
+        method: 'GET',
+      }
+    )
 
     if (!response.ok) {
-      return {
-        success: false,
-        status: 'RequestFailed',
-      }
+      new PayPayError('Request failed', 0)
     }
 
-    const result = await response.json()
     return parseUserInfoContext(result)
   }
+
+  async createLink(amount: number, password?: string): Promise<ResponseCreateLink> {
+    const ctx: {
+      androidMinimumVersion: string;
+      requestId: string;
+      requestAt: string;
+      theme: string;
+      amount: number;
+      iosMinimumVersion: string;
+      passcode?: string;
+    } = {
+      androidMinimumVersion: '3.45.0',
+      requestId: crypto.randomUUID(),
+      requestAt: new Date().toISOString(),
+      theme: 'default-sendmoney',
+      amount: amount,
+      iosMinimumVersion: '3.45.0',
+    }
+
+    if (password) {
+      ctx.passcode = password
+    }
+
+    const { response, result } = await this.baseFetch(
+      'https://www.paypay.ne.jp/app/v2/p2p-api/executeP2PSendMoneyLink',
+      {
+        method: 'POST',
+        body: JSON.stringify(ctx),
+      }
+    )
+
+    if (!response.ok) {
+      new PayPayError('Request failed', 0)
+    }
+
+    return parseCreateLink(result)
+  }
+  // Sub
 }

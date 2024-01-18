@@ -1,4 +1,4 @@
-import type { Anyone, ResponseBalance, ResponseUserInfo } from '../index.ts'
+import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseUserInfo } from '../index.ts'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -29,6 +29,18 @@ export function parseUserInfoContext(result: Anyone): ResponseUserInfo {
     phone_number: result.payload.mobile,
     email: result.payload.email,
     date_of_birth: result.payload.date_of_birth,
+    raw: result,
+  }
+}
+
+export function parseCreateLink(result: Anyone): ResponseCreateLink {
+  return {
+    success: true,
+    orderId: result.payload.orderId,
+    orderStatus: result.payload.orderStatus,
+    link: result.payload.link,
+    transactionAt: result.payload.transactionAt,
+    expiry: result.payload.expiry,
     raw: result,
   }
 }

@@ -78,3 +78,21 @@ export type ResponseUserInfo = {
     }
   }
 }
+
+export type ResponseCreateLink = {
+  success: true
+  orderId: string
+  orderStatus: 'PENDING'
+  link: string
+  transactionAt: string
+  expiry: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
+    }
+    payload: {
+      [key: string]: string
+    }
+  }
+}

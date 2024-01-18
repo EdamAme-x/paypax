@@ -6,6 +6,4 @@ export const PayPayStatus = {
   OTPLoginSuccess: 'OTPLoginSuccess',
   OTPLoginFail: 'OTPLoginFail',
   LoginAlreadySuccess: 'LoginAlreadySuccess',
-  RequestSuccess: 'RequestSuccess',
-  RequestFailed: 'RequestFailed',
 }
