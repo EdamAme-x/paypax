@@ -21,35 +21,35 @@ import {
 } from '../utils/parse'
 
 export class PayPay {
-  phone: string = ''
-  password: string = ''
-  uuid: string | undefined
-  token: string | undefined
-  header: baseHeader = createHeader()
-  cookie = new Map<string, string>()
-  refresh_at: number = 0
+  public phone: string = ''
+  public password: string = ''
+  public uuid: string | undefined
+  public token: string | undefined
+  public header: baseHeader = createHeader()
+  public cookie = new Map<string, string>()
+  public refresh_at: number = 0
 
   // is Logged
-  logged: boolean = false
+  private logged: boolean = false
 
   // one time password
-  otp: OTP = {
+  public otp: OTP = {
     waiting: false,
     otp_prefix: '',
     otp_ref_id: '',
   }
 
   constructor(phone: string, password: string) {
-    if (isPhone(phone)) {
-      if (isPassword(password)) {
-        this.phone = phone
-        this.password = password
-      } else {
-        new PayPayError('Password is not valid', 0)
-      }
-    } else {
+    if (!isPhone(phone)) {
       new PayPayError('Phone is not valid', 0)
     }
+
+    if (!isPassword(password)) {
+      new PayPayError('Password is not valid', 0)
+    }
+
+    this.phone = phone
+    this.password = password
   }
 
   private createLoginResult(success: boolean, status: loginResultStatus): loginResult {

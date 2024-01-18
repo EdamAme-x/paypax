@@ -29,13 +29,13 @@ export type LoginContext = {
 }
 
 export type CreateLinkContext = {
-  androidMinimumVersion: string;
-  requestId: string;
-  requestAt: string;
-  theme: string;
-  amount: number;
-  iosMinimumVersion: string;
-  passcode?: string;
+  androidMinimumVersion: string
+  requestId: string
+  requestAt: string
+  theme: string
+  amount: number
+  iosMinimumVersion: string
+  passcode?: string
 }
 
 export type FetchContext = {
