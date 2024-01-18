@@ -40,8 +40,8 @@ import { PayPay } from "https://deno.land/x/paypayjs/mod.ts"
 ```
 
 ## Docs
-作者に聞くか
-リリースのサンプルコードを見てください。
+作者に聞くか  
+[example](./example) ディレクトリのコードを見てください。
 
 ### Error 0番
 ライブラリのエラー
