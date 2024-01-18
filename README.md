@@ -6,12 +6,23 @@ for Node.js
 
 https://www.npmjs.com/package/paypayjs
 
+### Installation
+
+- Node.js or Bun
 ```shell
 npm i --save-dev paypayjs
 or
 yarn add -D paypayjs
 or
 pnpm i -save-dev paypayjs
+or
+bun i -D paypayjs
+```
+
+- Deno
+```typescript
+import PayPay from "https://deno.land/x/paypayjs/mod.ts"
+...
 ```
 
 ## Docs
