@@ -85,6 +85,26 @@ export function parseCreateLink(result: Anyone): ResponseCreateLink {
 }
 
 export function parseGetLink(result: Anyone): ResponseGetLink {
+  if (!('pendingP2PInfo' in result.payload)) {
+    return {
+      success: false,
+      orderId: '',
+      orderType: '',
+      description: '',
+      imageUrl: '',
+      amount: 0,
+      link: '',
+      isSetPasscode: false,
+      createdAt: '',
+      acceptedAt: '',
+      money_type: '',
+      sender_name: '',
+      sender_external_id: '',
+      photo_url: '',
+      raw: result,
+    }
+  }
+
   return {
     success: isSuccess(result),
     orderId: result.payload.pendingP2PInfo.orderId,
