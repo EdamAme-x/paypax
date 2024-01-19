@@ -13,7 +13,7 @@ describe('PayPayError', () => {
     try {
       error.fire()
     } catch (error: Error | any) {
-      expect(error.message).toBe('PayPayError [1] : test from paypay.x.js')
+      expect(error.message).toBe('PayPayError [1] : test from paypax')
     }
   })
 

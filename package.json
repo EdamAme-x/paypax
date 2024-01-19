@@ -1,6 +1,6 @@
 {
   "name": "paypax",
-  "version": "1.2.6",
+  "version": "1.3.0",
   "description": "Library for automate PayPay operations",
   "scripts": {
     "format": "prettier --write ./src/*.{ts,tsx} ./src/**/*.{ts,tsx}",
@@ -34,12 +34,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/EdamAme-x/paypay.x.js.git"
+    "url": "https://github.com/EdamAme-x/paypax.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "homepage": "github.com/EdamAme-x/paypay.x.js",
+  "homepage": "github.com/EdamAme-x/paypax",
   "dependencies": {
     "arg": "^5.0.2"
   },

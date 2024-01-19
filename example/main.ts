@@ -1,4 +1,4 @@
-// https://deno.land/x/paypayjs/mod.ts に書き換える
+// https://deno.land/x/paypax/mod.ts に書き換える
 import { PayPay } from '../deno_dist/mod.ts'
 import { PayPayStatus } from '../deno_dist/mod.ts'
 

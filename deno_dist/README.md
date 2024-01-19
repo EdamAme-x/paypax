@@ -6,7 +6,7 @@ can call it either **PayPay.js** or **PayPax**.
 
 for Node.js, Deno, Bun (all :) )
 
-https://www.npmjs.com/package/paypay.x.js
+https://www.npmjs.com/package/paypax
 
 ## UseCase
 - Cash dispenser
@@ -31,18 +31,18 @@ https://www.npmjs.com/package/paypay.x.js
 
 - Node.js or Bun
 ```shell
-npm i --save-dev paypay.x.js
+npm i --save-dev paypax
 or
-yarn add -D paypay.x.js
+yarn add -D paypax
 or
-pnpm i -save-dev paypay.x.js
+pnpm i -save-dev paypax
 or
-bun i -D paypay.x.js
+bun i -D paypax
 ```
 
 - Deno
 ```typescript
-import { PayPay } from "https://deno.land/x/paypayjs/mod.ts"
+import { PayPay } from "https://deno.land/x/paypax/mod.ts"
 ...
 ```
 
