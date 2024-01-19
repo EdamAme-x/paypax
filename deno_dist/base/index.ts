@@ -1,4 +1,4 @@
-import { PayPayError, isPassword, isPhone, isUuid } from '../index.ts'
+import { PayPayError, PayPayStatus, isPassword, isPhone, isSuccess, isUuid } from '../index.ts'
 import { createHeader } from '../headers/index.ts'
 import type {
   CreateLinkContext,
@@ -374,6 +374,43 @@ export class PayPay {
     }
   }
 
+  // sub
+  async rejectLink(link: string): Promise<ResponseBody> {
+    if (!this.isLogged()) {
+      throw new PayPayError('Do not logged in', 2).fire()
+    }
+
+    if (!link.includes('pay.paypay.ne.jp') || link.trim() === '') {
+      throw new PayPayError('Invalid link', 1).fire()
+    }
+
+    const code = link.split('/').pop()
+
+    const { response, result } = await this.baseFetch(
+      `https://www.paypay.ne.jp/app/v2/p2p-api/rejectP2PSendMoneyLink?verificationCode=${code}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          verificationCode: code,
+          client_uuid: this.uuid ?? crypto.randomUUID(),
+          requestId: crypto.randomUUID(),
+          requestAt: new Date().toISOString(),
+          iosMinimumVersion: '3.45.0',
+          androidMinimumVersion: '3.45.0',
+        }),
+      }
+    )
+
+    if (!response.ok) {
+      throw new PayPayError('Reject link failed', 1).fire()
+    }
+
+    return {
+      success: isSuccess(result),
+      raw: result
+    }
+  }
+
   async sendMoney(amount: number, external_id: string): Promise<ResponseBody> {
 
     if (!this.isLogged()) {
@@ -415,7 +452,7 @@ export class PayPay {
     }
 
     return {
-      success: true,
+      success: isSuccess(result),
       ...result.payload,
       raw: result
     }
@@ -437,7 +474,7 @@ export class PayPay {
     }
 
     return {
-      success: true,
+      success: isSuccess(result),
       raw: result
     }
   }
@@ -460,5 +497,35 @@ export class PayPay {
     return await this.login({
       uuid: this.uuid ?? crypto.randomUUID(),
     })
+  }
+}
+
+export class PayPayRecovery {
+  public phone: string
+  public password: string
+  public uuid: string
+
+  constructor(
+    code: string
+  ) {
+    const object = unparseRecoveryCode(code)
+    this.phone = object.phone
+    this.password = object.password
+    this.uuid = object.uuid ?? crypto.randomUUID()
+  }
+
+  async recovery(): Promise<PayPay> {
+
+    const paypay = new PayPay(this.phone, this.password)
+    
+    const result = await paypay.login({
+      uuid: this.uuid,
+    })
+
+    if (result.status === PayPayStatus.LoginNeedOTP || result.status === PayPayStatus.LoginFailed) {
+      throw new PayPayError('Recovery failed', 1).fire()
+    }
+
+    return paypay
   }
 }

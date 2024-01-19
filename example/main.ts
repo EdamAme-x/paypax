@@ -1,5 +1,5 @@
 // https://deno.land/x/paypax/mod.ts に書き換える
-import { PayPay } from '../deno_dist/mod.ts'
+import { PayPay, PayPayRecovery } from '../deno_dist/mod.ts'
 import { PayPayStatus } from '../deno_dist/mod.ts'
 
 const paypay = new PayPay('09019194545', 'p@ssw0rd')
@@ -17,5 +17,15 @@ if (result.status === PayPayStatus.LoginNeedOTP) {
     console.log(await paypay.request('getPay2BalanceHistory'))
     console.log(await paypay.request('getPaymentMethodList'))
     console.log(await paypay.request('getProfileDisplayInfo'))
-    console.log((await paypay.sendMoney(1, 'external_id')))
+    console.log(await paypay.sendMoney(1, 'external_id'))
+    console.log(await paypay.rejectLink('https://pay.paypay.ne.jp/~'))
+    const recoveryCode = await paypay.getRecoveryCode()
+
+    try {
+        const paypay2 = await new PayPayRecovery(recoveryCode).recovery()
+        console.log(await paypay2.getBalance())
+    }catch (_e) {
+        console.log('Recovery failed!!!')
+        console.log(_e)
+    }
 }

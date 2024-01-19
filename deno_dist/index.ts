@@ -1,4 +1,4 @@
-export { PayPay } from './base/index.ts'
+export { PayPay, PayPayRecovery } from './base/index.ts'
 export { PayPayError } from './erorr/index.ts'
 export * from './utils/is.ts'
 export * from './utils/parse.ts'

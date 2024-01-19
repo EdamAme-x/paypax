@@ -1,4 +1,4 @@
-import { PayPayError, type Anyone, type ResponseBalance, type ResponseCreateLink, type ResponseGetLink, type ResponseReceiveLink, type ResponseUserInfo } from '../index.ts'
+import { PayPayError, type Anyone, type ResponseBalance, type ResponseCreateLink, type ResponseGetLink, type ResponseReceiveLink, type ResponseUserInfo, isSuccess } from '../index.ts'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -46,7 +46,7 @@ export function unparseRecoveryCode(recoveryCode: string): {
 
 export function parseBalanceContext(result: Anyone): ResponseBalance {
   return {
-    success: true,
+    success: isSuccess(result),
     total: result.payload.walletSummary.allTotalBalanceInfo.balance,
     currency: result.payload.walletSummary.allTotalBalanceInfo.currency,
     updated_at: result.payload.updatedAt,
@@ -56,7 +56,7 @@ export function parseBalanceContext(result: Anyone): ResponseBalance {
 
 export function parseUserInfoContext(result: Anyone): ResponseUserInfo {
   return {
-    success: true,
+    success: isSuccess(result),
     id: result.payload.id,
     user_id: result.payload.user_defined_id ?? 'unknown',
     state: result.payload.state,
@@ -74,7 +74,7 @@ export function parseUserInfoContext(result: Anyone): ResponseUserInfo {
 
 export function parseCreateLink(result: Anyone): ResponseCreateLink {
   return {
-    success: true,
+    success: isSuccess(result),
     orderId: result.payload.orderId,
     orderStatus: result.payload.orderStatus,
     link: result.payload.link,
@@ -86,7 +86,7 @@ export function parseCreateLink(result: Anyone): ResponseCreateLink {
 
 export function parseGetLink(result: Anyone): ResponseGetLink {
   return {
-    success: true,
+    success: isSuccess(result),
     orderId: result.payload.pendingP2PInfo.orderId,
     orderType: result.payload.pendingP2PInfo.orderType,
     description: result.payload.pendingP2PInfo.description,
@@ -106,7 +106,7 @@ export function parseGetLink(result: Anyone): ResponseGetLink {
 
 export function parseReceiveLink(result: Anyone): ResponseReceiveLink {
   return {
-    success: true,
+    success: isSuccess(result),
     messageId: result.payload.messageId,
     chatRoomId: result.payload.chatRoomId,
     orderStatus: result.payload.orderStatus,

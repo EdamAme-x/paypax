@@ -1,4 +1,4 @@
-export { PayPay } from './base'
+export { PayPay, PayPayRecovery } from './base'
 export { PayPayError } from './erorr'
 export * from './utils/is'
 export * from './utils/parse'
