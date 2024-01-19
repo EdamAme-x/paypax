@@ -1,9 +1,46 @@
-import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseReceiveLink, ResponseUserInfo } from '..'
+import { PayPayError, type Anyone, type ResponseBalance, type ResponseCreateLink, type ResponseGetLink, type ResponseReceiveLink, type ResponseUserInfo } from '..'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
     .map(([key, value]) => `${key}=${value}`)
     .join('; ')
+}
+
+export const recoveryPrefix = 'eyJhbGc'
+
+export function parseRecoveryCode(phone: string, password: string, uuid: string): string {
+  const encode = (string: string): string => {
+    return btoa(encodeURIComponent(string))
+  }
+  return `${recoveryPrefix}${encode(phone)}.${encode(password)}.${encode(uuid)}`
+}
+
+export function unparseRecoveryCode(recoveryCode: string): {
+  phone: string
+  password: string
+  uuid: string
+} {
+  const decode = (string: string): string => {
+    return decodeURIComponent(atob(string))
+  }
+
+  const cache = recoveryCode.split('.')
+
+  if (cache.length !== 4) {
+    throw new PayPayError('Invalid recovery code', 3).fire()
+  }
+
+  const [prefix, phone, password, uuid] = cache
+
+  if (recoveryPrefix !== prefix) {
+    throw new PayPayError('Invalid recovery code', 3).fire()
+  }
+
+  return {
+    phone: decode(phone),
+    password: decode(password),
+    uuid: decode(uuid),
+  }
 }
 
 export function parseBalanceContext(result: Anyone): ResponseBalance {

@@ -24,6 +24,8 @@ import {
   parseCreateLink,
   parseGetLink,
   parseReceiveLink,
+  parseRecoveryCode,
+  unparseRecoveryCode,
 } from '../utils/parse.ts'
 
 export class PayPay {
@@ -47,11 +49,11 @@ export class PayPay {
 
   constructor(phone: string, password: string) {
     if (!isPhone(phone)) {
-      new PayPayError('Phone is not valid', 0).fire()
+      throw new PayPayError('Phone is not valid', 0).fire()
     }
 
     if (!isPassword(password)) {
-      new PayPayError('Password is not valid', 0).fire()
+      throw new PayPayError('Password is not valid', 0).fire()
     }
 
     this.phone = phone
@@ -82,7 +84,7 @@ export class PayPay {
       if (isUuid(uuid)) {
         this.uuid = uuid
       } else {
-        new PayPayError('UUID is not valid', 0).fire()
+        throw new PayPayError('UUID is not valid', 0).fire()
 
         return this.createLoginResult(false, 'LoginFailed')
       }
@@ -181,7 +183,7 @@ export class PayPay {
     if (this.uuid) {
       return this.uuid
     } else {
-      new PayPayError('Not logged in yet.', 2).fire()
+      throw new PayPayError('Not logged in yet.', 2).fire()
     }
   }
 
@@ -227,7 +229,7 @@ export class PayPay {
   // Main
   async getBalance(): Promise<ResponseBalance> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -238,7 +240,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Get balance failed', 1).fire()
+      throw new PayPayError('Get balance failed', 1).fire()
     }
 
     return parseBalanceContext(result)
@@ -246,7 +248,7 @@ export class PayPay {
 
   async getUserInfo(): Promise<ResponseUserInfo> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -257,7 +259,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Get user info failed', 1).fire()
+      throw new PayPayError('Get user info failed', 1).fire()
     }
 
     return parseUserInfoContext(result)
@@ -265,11 +267,11 @@ export class PayPay {
 
   async createLink(amount: number, passcode?: string): Promise<ResponseCreateLink> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     if (amount < 1) {
-      new PayPayError('Amount must be greater than 0', 1).fire()
+      throw new PayPayError('Amount must be greater than 0', 1).fire()
     }
 
     const ctx: CreateLinkContext = {
@@ -294,7 +296,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Create link failed', 1).fire()
+      throw new PayPayError('Create link failed', 1).fire()
     }
 
     return parseCreateLink(result)
@@ -302,11 +304,11 @@ export class PayPay {
   
   async getLink(link: string): Promise<ResponseGetLink> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     if (!link.includes('pay.paypay.ne.jp') || link.trim() === '') {
-      new PayPayError('Invalid link', 1).fire()
+      throw new PayPayError('Invalid link', 1).fire()
     }
 
     const code = link.split('/').pop()
@@ -319,7 +321,7 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Link is not found', 1).fire()
+      throw new PayPayError('Link is not found', 1).fire()
     }
 
     return parseGetLink(result)
@@ -327,15 +329,15 @@ export class PayPay {
 
   async receiveLink(link: string, passcode?: string): Promise<ResponseReceiveLink | undefined> {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     if (passcode && passcode.length !== 4) {
-      new PayPayError('Passcode must be 4 digits', 1).fire()
+      throw new PayPayError('Passcode must be 4 digits', 1).fire()
     }
 
     if (!link.includes('pay.paypay.ne.jp') || link.trim() === '') {
-      new PayPayError('Invalid link', 1).fire()
+      throw new PayPayError('Invalid link', 1).fire()
     }
 
     try {
@@ -363,27 +365,27 @@ export class PayPay {
       )
 
       if (!response.ok) {
-        new PayPayError('Receive link failed', 1).fire()
+        throw new PayPayError('Receive link failed', 1).fire()
       }
 
       return parseReceiveLink(result)
     }catch (_e) {
-      new PayPayError('Invalid link', 1).fire()
+      throw new PayPayError('Invalid link', 1).fire()
     }
   }
 
   async sendMoney(amount: number, external_id: string): Promise<ResponseBody> {
 
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     if (amount < 1) {
-      new PayPayError('Amount must be greater than 0', 1).fire()
+      throw new PayPayError('Amount must be greater than 0', 1).fire()
     }
 
     if (!external_id || external_id.trim() === '') {
-      new PayPayError('External id is required', 1).fire()
+      throw new PayPayError('External id is required', 1).fire()
     }
 
     const ctx: SendMoneyContext = {
@@ -405,11 +407,11 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      new PayPayError('Send money failed', 1).fire()
+      throw new PayPayError('Send money failed', 1).fire()
     }
 
     if (result.header.resultCode === 'S9999') {
-      new PayPayError('You\'re not friends with user', 1).fire()
+      throw new PayPayError('You\'re not friends with user', 1).fire()
     }
 
     return {
@@ -421,7 +423,7 @@ export class PayPay {
 
   async request(path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList') {
     if (!this.isLogged()) {
-      new PayPayError('Do not logged in', 2).fire()
+      throw new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
@@ -431,12 +433,32 @@ export class PayPay {
     })
 
     if (!response.ok) {
-      new PayPayError('Request path failed', 1).fire()
+      throw new PayPayError('Request path failed', 1).fire()
     }
 
     return {
       success: true,
       raw: result
     }
+  }
+
+  public getRecoveryCode(): string {
+    if (!this.isLogged()) {
+      throw new PayPayError('Do not logged in', 2).fire()
+    }
+
+    const code = parseRecoveryCode(this.phone, this.password, this.uuid ?? '')
+
+    return code
+  }
+
+  async recoveryFromCode(code: string): Promise<loginResult> {
+    const object = unparseRecoveryCode(code)
+    this.phone = object.phone
+    this.password = object.password
+
+    return await this.login({
+      uuid: this.uuid ?? crypto.randomUUID(),
+    })
   }
 }

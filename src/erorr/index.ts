@@ -9,8 +9,8 @@ export class PayPayError {
     }
   }
 
-  fire() {
+  fire(): Error {
     const { message, code } = this
-    throw new Error(`PayPayError [${code}] : ${message} from paypax`)
+    return new Error(`PayPaxError [${code}] : ${message}`)
   }
 }

@@ -11,9 +11,9 @@ describe('PayPayError', () => {
 
   test('PayPayError Method', () => {
     try {
-      error.fire()
+      throw error.fire()
     } catch (error: Error | any) {
-      expect(error.message).toBe('PayPayError [1] : test from paypax')
+      expect(error.message).toBe('PayPaxError [1] : test')
     }
   })
 

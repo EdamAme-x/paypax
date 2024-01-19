@@ -61,6 +61,9 @@ import { PayPay } from "https://deno.land/x/paypax/mod.ts"
 ### Error 2番
 初期化(ログイン)が終わっていないと実行できないメソッドを実行している。
 
+### Error 3番
+パースのエラー
+
 ## PullRequest
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
