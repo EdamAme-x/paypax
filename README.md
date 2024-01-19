@@ -2,6 +2,8 @@
 PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
 
+<img src="/docs/docs/public/favicon.png" width="200" height="200" alt="icon" />
+
 can call it either **paypax** or **PayPax**.
 
 for Node.js, Deno, Bun (all :) )
