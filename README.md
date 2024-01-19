@@ -49,8 +49,9 @@ import { PayPay } from "https://deno.land/x/paypax/mod.ts"
 ```
 
 ## Docs
-作者に聞くか  
-[example](./example) ディレクトリのコードを見てください。
+[https://edamame-x.github.io/paypax](https://edamame-x.github.io/paypax/)
+
+[example](./example)
 
 ### Error 0番
 ライブラリの初期化エラー
@@ -74,3 +75,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 Created by [@amex2189](https://ame-x.net)
 
 Python版 元版: [https://github.com/taka-4602/PayPaython](https://github.com/taka-4602/PayPaython)
+助言 Disocrd: @developerspartner 
