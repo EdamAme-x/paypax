@@ -8,6 +8,11 @@ for Node.js, Deno, Bun (all :) )
 
 https://www.npmjs.com/package/paypay.x.js
 
+## UseCase
+- Cash dispenser
+- PayPay for Web
+- ... (and more)
+
 ### Features
 - Fastest
 - Multi Platform (Node.js, Deno, Bun...)
