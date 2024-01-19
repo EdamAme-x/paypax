@@ -1,4 +1,4 @@
-# PayPay.x.js | PayPax
+# PayPax
 PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
 
