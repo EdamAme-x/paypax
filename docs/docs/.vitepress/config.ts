@@ -18,4 +18,5 @@ export default defineConfig({
         ['meta', { name: 'twitter:title', content: 'PayPax JS | PayPay Library' }],
         ['meta', { name: 'twitter:description', content: 'PayPay operations can be automated | PayPax JS' }],
     ],
+    base: "/docs",
 })
