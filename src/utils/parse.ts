@@ -21,20 +21,21 @@ export function unparseRecoveryCode(recoveryCode: string): {
   uuid: string
 } {
   const decode = (string: string): string => {
+    console.log(string)
     return decodeURIComponent(atob(string))
   }
 
-  const cache = recoveryCode.split('.')
+  if (!recoveryCode.startsWith(recoveryPrefix)) {
+    throw new PayPayError('Invalid recovery code', 2).fire()
+  }
 
-  if (cache.length !== 4) {
+  const cache = recoveryCode.replace(recoveryPrefix, '').split('.')
+
+  if (cache.length !== 3) {
     throw new PayPayError('Invalid recovery code', 3).fire()
   }
 
-  const [prefix, phone, password, uuid] = cache
-
-  if (recoveryPrefix !== prefix) {
-    throw new PayPayError('Invalid recovery code', 3).fire()
-  }
+  const [phone, password, uuid] = cache
 
   return {
     phone: decode(phone),
