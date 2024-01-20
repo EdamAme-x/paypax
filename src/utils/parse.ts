@@ -1,5 +1,13 @@
 import { PayPayError, isSuccess } from '..'
-import type { Anyone, ResponseAnyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseReceiveLink, ResponseUserInfo } from '../types'
+import type {
+  Anyone,
+  ResponseAnyone,
+  ResponseBalance,
+  ResponseCreateLink,
+  ResponseGetLink,
+  ResponseReceiveLink,
+  ResponseUserInfo,
+} from '../types'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -62,7 +70,7 @@ export function parseBalanceContext(result: Anyone, success: boolean): ResponseB
       updated_at: new Date(0).toISOString(),
       raw: result,
     }
-  }catch (_e) {
+  } catch (_e) {
     return {
       success: false,
       message: parseResultMessage(result),
@@ -92,7 +100,7 @@ export function parseUserInfoContext(result: Anyone, success: boolean): Response
       external_id: result.payload.external_id ?? 'unknown',
       raw: result,
     }
-  }catch (_e) {
+  } catch (_e) {
     return {
       success: false,
       message: parseResultMessage(result),
@@ -124,7 +132,7 @@ export function parseCreateLink(result: Anyone, success: boolean): ResponseCreat
       expiry: result.payload.expiry ?? new Date(0).toISOString(),
       raw: result,
     }
-  }catch (_e) {
+  } catch (_e) {
     return {
       success: false,
       message: parseResultMessage(result),
@@ -160,7 +168,7 @@ export function parseGetLink(result: Anyone, success: boolean): ResponseGetLink 
         raw: result,
       }
     }
-  
+
     return {
       success: success && isSuccess(result),
       message: parseResultMessage(result),
@@ -179,7 +187,7 @@ export function parseGetLink(result: Anyone, success: boolean): ResponseGetLink 
       photo_url: result.payload.sender.photoUrl ?? 'unknown',
       raw: result,
     }
-  }catch (_e) {
+  } catch (_e) {
     return {
       success: false,
       message: parseResultMessage(result),

@@ -37,10 +37,10 @@ describe('Util', () => {
       },
       payload: {
         paypay: 'resultCode',
-        oosugi: 'dounikashite'
-      }
+        oosugi: 'dounikashite',
+      },
     }
-    
+
     const invalidSuccess = {
       header: {
         resultCode: 'S0001',
@@ -48,8 +48,8 @@ describe('Util', () => {
       },
       payload: {
         paypay: 'resultCode',
-        oosugi: 'dounikashite'
-      }
+        oosugi: 'dounikashite',
+      },
     }
 
     expect(util.isSuccess(validSuccess)).toBeTruthy()

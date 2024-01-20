@@ -8,7 +8,7 @@ describe('PayPayError', () => {
   test('PayPay Fail', async () => {
     expect(await paypay.login()).toStrictEqual({
       success: false,
-      status: PayPayStatus.LoginFailed
+      status: PayPayStatus.LoginFailed,
     })
   })
 })

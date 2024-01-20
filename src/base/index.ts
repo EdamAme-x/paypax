@@ -211,9 +211,7 @@ export class PayPay {
       'resultCode' in result['header'] &&
       'resultMessage' in result['header']
     ) {
-      if (
-        result['header']['resultCode'] === 'S0001'
-      ) {
+      if (result['header']['resultCode'] === 'S0001') {
         // Refresh
         await this.login({
           uuid: this.uuid,
@@ -302,7 +300,7 @@ export class PayPay {
 
     return parseCreateLink(result, true)
   }
-  
+
   async getLink(link: string): Promise<ResponseGetLink> {
     if (!this.isLogged()) {
       throw new PayPayError('Do not logged in', 2).fire()
@@ -370,7 +368,7 @@ export class PayPay {
       }
 
       return parseReceiveLink(result, true)
-    }catch (_e) {
+    } catch (_e) {
       throw new PayPayError('Invalid link', 1).fire()
     }
   }
@@ -410,7 +408,6 @@ export class PayPay {
   }
 
   async sendMoney(amount: number, external_id: string): Promise<ResponseBody> {
-
     if (!this.isLogged()) {
       throw new PayPayError('Do not logged in', 2).fire()
     }
@@ -437,7 +434,7 @@ export class PayPay {
       'https://www.paypay.ne.jp/app/v2/p2p-api/executeP2PSendMoney',
       {
         method: 'POST',
-        body: JSON.stringify(ctx), 
+        body: JSON.stringify(ctx),
       }
     )
 
@@ -446,22 +443,25 @@ export class PayPay {
     }
 
     if (result.header.resultCode === 'S9999') {
-      throw new PayPayError('You\'re not friends with user', 1).fire()
+      throw new PayPayError("You're not friends with user", 1).fire()
     }
 
     return parseAny(result, true)
   }
 
-  async request(path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList'): Promise<ResponseAnyone> {
+  async request(
+    path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList'
+  ): Promise<ResponseAnyone> {
     if (!this.isLogged()) {
       throw new PayPayError('Do not logged in', 2).fire()
     }
 
     const { response, result } = await this.baseFetch(
       `https://www.paypay.ne.jp/app/v2/bff/${path}`,
-    {
-      method: 'GET'
-    })
+      {
+        method: 'GET',
+      }
+    )
 
     if (!response.ok) {
       return parseAny(result, false)
@@ -496,9 +496,7 @@ export class PayPayRecovery {
   public password: string
   public uuid: string
 
-  constructor(
-    code: string
-  ) {
+  constructor(code: string) {
     const object = unparseRecoveryCode(code)
     this.phone = object.phone
     this.password = object.password
@@ -506,9 +504,8 @@ export class PayPayRecovery {
   }
 
   async recovery(): Promise<PayPay> {
-
     const paypay = new PayPay(this.phone, this.password)
-    
+
     const result = await paypay.login({
       uuid: this.uuid,
     })
