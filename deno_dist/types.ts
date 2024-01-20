@@ -177,3 +177,17 @@ export type ResponseReceiveLink = {
     }
   }
 }
+
+export type ResponseAnyone = {
+  success: boolean
+  message: string
+  raw: {
+    header: {
+      resultCode: string
+      resultMessage: string
+    }
+    payload: {
+      [key: string]: Anyone
+    }
+  }
+}

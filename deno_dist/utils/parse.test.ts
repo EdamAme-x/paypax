@@ -1,4 +1,4 @@
-// PayPay Error Test
+// PayPay Parse Test
 import * as util from './parse.ts'
 
 describe('Util', () => {

@@ -1,5 +1,5 @@
 import { PayPayError, isSuccess } from '..'
-import type { Anyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseReceiveLink, ResponseUserInfo } from '../types'
+import type { Anyone, ResponseAnyone, ResponseBalance, ResponseCreateLink, ResponseGetLink, ResponseReceiveLink, ResponseUserInfo } from '../types'
 
 export function parseCookieFromMap(map: Map<string, string>): string {
   return Array.from(map.entries())
@@ -218,6 +218,22 @@ export function parseReceiveLink(result: Anyone, success: boolean): ResponseRece
       messageId: 'unknown',
       chatRoomId: 'unknown',
       orderStatus: 'unknown',
+      raw: result,
+    }
+  }
+}
+
+export function parseAny(result: Anyone, success: boolean): ResponseAnyone {
+  try {
+    return {
+      success: success && isSuccess(result),
+      message: parseResultMessage(result),
+      raw: result,
+    }
+  } catch (_e) {
+    return {
+      success: false,
+      message: parseResultMessage(result),
       raw: result,
     }
   }

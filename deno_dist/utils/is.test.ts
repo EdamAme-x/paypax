@@ -1,4 +1,4 @@
-// PayPay Error Test
+// PayPay is Test
 import * as util from './is.ts'
 
 describe('Util', () => {
@@ -27,5 +27,32 @@ describe('Util', () => {
     expect(util.isUuid(validUuid)).toBeTruthy()
     expect(util.isUuid(invalidUuid)).toBeFalsy()
     expect(util.isUuid(invalidUuid2)).toBeFalsy()
+  })
+
+  test('isSuccess', () => {
+    const validSuccess = {
+      header: {
+        resultCode: 'S0000',
+        resultMessage: 'Success',
+      },
+      payload: {
+        paypay: 'resultCode',
+        oosugi: 'dounikashite'
+      }
+    }
+    
+    const invalidSuccess = {
+      header: {
+        resultCode: 'S0001',
+        resultMessage: 'Invalid anyone',
+      },
+      payload: {
+        paypay: 'resultCode',
+        oosugi: 'dounikashite'
+      }
+    }
+
+    expect(util.isSuccess(validSuccess)).toBeTruthy()
+    expect(util.isSuccess(invalidSuccess)).toBeFalsy()
   })
 })

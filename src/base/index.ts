@@ -6,6 +6,7 @@ import type {
   LoginContext,
   OTP,
   ReceiveLinkContext,
+  ResponseAnyone,
   ResponseBalance,
   ResponseBody,
   ResponseCreateLink,
@@ -26,6 +27,8 @@ import {
   parseReceiveLink,
   parseRecoveryCode,
   unparseRecoveryCode,
+  parseResultMessage,
+  parseAny,
 } from '../utils/parse'
 import { randomUUID } from '../utils/uuid'
 
@@ -400,16 +403,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      return {
-        success: false,
-        raw: result
-      }
+      return parseAny(result, false)
     }
 
-    return {
-      success: isSuccess(result),
-      raw: result
-    }
+    return parseAny(result, true)
   }
 
   async sendMoney(amount: number, external_id: string): Promise<ResponseBody> {
@@ -445,24 +442,17 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      return {
-        success: false,
-        raw: result
-      }
+      return parseAny(result, false)
     }
 
     if (result.header.resultCode === 'S9999') {
       throw new PayPayError('You\'re not friends with user', 1).fire()
     }
 
-    return {
-      success: isSuccess(result),
-      ...result.payload,
-      raw: result
-    }
+    return parseAny(result, true)
   }
 
-  async request(path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList') {
+  async request(path: 'getProfileDisplayInfo' | 'getPay2BalanceHistory' | 'getPaymentMethodList'): Promise<ResponseAnyone> {
     if (!this.isLogged()) {
       throw new PayPayError('Do not logged in', 2).fire()
     }
@@ -474,16 +464,10 @@ export class PayPay {
     })
 
     if (!response.ok) {
-      return {
-        success: false,
-        raw: result
-      }
+      return parseAny(result, false)
     }
 
-    return {
-      success: isSuccess(result),
-      raw: result
-    }
+    return parseAny(result, true)
   }
 
   public getRecoveryCode(): string {
