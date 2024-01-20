@@ -37,9 +37,9 @@ npm i --save-dev paypax
 or
 yarn add -D paypax
 or
-pnpm i -save-dev paypax
+pnpm add --save-dev paypax
 or
-bun i -D paypax
+bun add -D paypax
 ```
 
 - Deno
