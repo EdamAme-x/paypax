@@ -2,8 +2,6 @@
 [![GitHub](https://img.shields.io/github/license/EdamAme-x/paypax)](https://github.com/EdamAme-x/paypax/blob/main/LICENSE)
 [![npm](https://img.shields.io/npm/v/paypax)](https://www.npmjs.com/package/paypax)
 [![npm](https://img.shields.io/npm/dm/paypax)](https://www.npmjs.com/package/paypax)
-[![Bundle Size](https://img.shields.io/bundlephobia/min/paypax)](https://bundlephobia.com/result?p=paypax)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/paypax)](https://bundlephobia.com/result?p=paypax)
 [![npm type definitions](https://img.shields.io/npm/types/paypax)](https://www.npmjs.com/package/paypax)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/EdamAme-x/paypax)](https://github.com/EdamAme-x/paypax/pulse)
 [![GitHub last commit](https://img.shields.io/github/last-commit/EdamAme-x/paypax)](https://github.com/EdamAme-x/paypax/commits/main)
