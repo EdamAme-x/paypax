@@ -27,6 +27,7 @@ import {
   parseRecoveryCode,
   unparseRecoveryCode,
 } from '../utils/parse'
+import { randomUUID } from '../utils/uuid'
 
 export class PayPay {
   public phone: string = ''
@@ -87,7 +88,7 @@ export class PayPay {
         throw new PayPayError('UUID is not valid', 0).fire()
       }
     } else {
-      this.uuid = crypto.randomUUID()
+      this.uuid = randomUUID()
     }
 
     const ctx = {
@@ -274,7 +275,7 @@ export class PayPay {
 
     const ctx: CreateLinkContext = {
       androidMinimumVersion: '3.45.0',
-      requestId: crypto.randomUUID(),
+      requestId: randomUUID(),
       requestAt: new Date().toISOString(),
       theme: 'default-sendmoney',
       amount: amount,
@@ -343,7 +344,7 @@ export class PayPay {
 
       const ctx: ReceiveLinkContext = {
         verificationCode: link.split('/').pop() ?? '',
-        client_uuid: this.uuid ?? crypto.randomUUID(),
+        client_uuid: this.uuid ?? randomUUID(),
         passcode: passcode ?? '2189',
         requestAt: new Date().toISOString(),
         requestId: info.raw.payload.message.data.requestId,
@@ -390,8 +391,8 @@ export class PayPay {
         method: 'POST',
         body: JSON.stringify({
           verificationCode: code,
-          client_uuid: this.uuid ?? crypto.randomUUID(),
-          requestId: crypto.randomUUID(),
+          client_uuid: this.uuid ?? randomUUID(),
+          requestId: randomUUID(),
           requestAt: new Date().toISOString(),
           iosMinimumVersion: '3.45.0',
           androidMinimumVersion: '3.45.0',
@@ -427,7 +428,7 @@ export class PayPay {
       theme: 'default-sendmoney',
       externalReceiverId: external_id,
       amount: amount,
-      requestId: crypto.randomUUID(),
+      requestId: randomUUID(),
       requestAt: new Date().toISOString(),
       iosMinimumVersion: '3.45.0',
       androidMinimumVersion: '3.45.0',
@@ -493,7 +494,7 @@ export class PayPay {
     this.password = object.password
 
     return await this.login({
-      uuid: this.uuid ?? crypto.randomUUID(),
+      uuid: this.uuid ?? randomUUID(),
     })
   }
 }
@@ -509,7 +510,7 @@ export class PayPayRecovery {
     const object = unparseRecoveryCode(code)
     this.phone = object.phone
     this.password = object.password
-    this.uuid = object.uuid ?? crypto.randomUUID()
+    this.uuid = object.uuid ?? randomUUID()
   }
 
   async recovery(): Promise<PayPay> {
