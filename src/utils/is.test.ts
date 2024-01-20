@@ -40,6 +40,7 @@ describe('Util', () => {
         oosugi: 'dounikashite'
       }
     }
+    
     const invalidSuccess = {
       header: {
         resultCode: 'S0001',
