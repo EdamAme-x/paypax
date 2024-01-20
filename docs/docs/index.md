@@ -2,7 +2,7 @@
 
 まず初めに、このドキュメントは日本語で書かれています。PayPayは日本のサービスなので、問題ないでしょう（多分）。
 
-**PayPax**は、[PayPay](https://paypay.ne.jp)を**Node.js**や**Deno**、**Bun**から操作できるようにしたOSSライブラリです。ぜひ[リポジトリ](https://github.com/EdamAme-x/paypax)のスターをお願いします！
+ **PayPax** は、[PayPay](https://paypay.ne.jp)を **Node.js** や **Deno** 、 **Bun** から操作できるようにしたOSSライブラリです。ぜひ[リポジトリ](https://github.com/EdamAme-x/paypax)のスターをお願いします！
 
 ## リンク集
 リポジトリ: [https://github.com/EdamAme-x/paypax]  
@@ -13,10 +13,10 @@ Twitter: [https://twitter.com/amex2189]
 Website: [https://ame-x.net]  
 
 ## 予備知識
-この**Docs**では、**Deno**を前提に説明します。ただし、**Deno**と**Node.js**にはある程度互換性がありますので、以下に上げる事以外はほぼ同じです。
+この **Docs** では、 **Deno** 前提に説明します。ただし、 **Deno** と **Node.js** にはある程度互換性がありますので、以下に上げる事以外はほぼ同じです。
 
 ### 標準入力の受け取り方
-**Deno**では、`prompt("who are you? : ")`で簡単に受け取れますが、**Node.js**は**readline**等のモジュールを使う必要があります。分からなければ調べれば一発で出ます。
+ **Deno** では、`prompt("who are you? : ")`で簡単に受け取れますが、 **Node.js** は **readline** 等のモジュールを使う必要があります。分からなければ調べれば一発で出ます。
 
 ### Top level await
 今回のコードでは例のために最低限の動作を見せます。そのため、
@@ -25,9 +25,9 @@ Website: [https://ame-x.net]
 await paypay.login(...);
 ```
 
-このような書き方をしていますが、実際は**async**で包んだりする必要があります。ただし、**Deno**ではTop level awaitが使えるのでサンプルそのままで使えます。
+このような書き方をしていますが、実際は **async** で包んだりする必要があります。ただし、 **Deno** ではTop level awaitが使えるのでサンプルそのままで使えます。
 
-練習は、**Deno**がおススメです。
+練習は、 **Deno** がおススメです。
 
 ## インストールしよう
 
@@ -41,16 +41,16 @@ or
 bun add -D paypax
 ```
 
-**Node.js**や**Bun**は以上のコマンドのいずれかでインストールできます。
+ **Node.js** や **Bun** は以上のコマンドのいずれかでインストールできます。
 
-**Deno**は
+ **Deno** は
 
 ```typescript
 import { PayPay } from "https://deno.land/x/paypax/mod.ts"
 ...
 ```
 
-このように書くか、`deno.json`の**imports**に
+このように書くか、`deno.json`の **imports** に
 ```json
 "imports": {
     "paypax": "https://deno.land/x/paypax/mod.ts"
@@ -65,11 +65,11 @@ import { PayPay } from "https://deno.land/x/paypax/mod.ts"
 import { PayPay } from "paypax";
 ```
 
-このように書くことができるようになりました。ただし、これは**esm**での話で、**commonjs** (require)を使っている場合は話が変わりますが、今時**commonjs**を使っているのは変態しかいないので大丈夫でしょう。
+このように書くことができるようになりました。ただし、これは **esm** での話で、 **commonjs**  (require)を使っている場合は話が変わりますが、今時 **commonjs** を使っているのは変態しかいないので大丈夫でしょう。
 
 ## ログインしよう
 
-まずは基本から自分のアカウントにログインしてみましょう。必要なのは電話番号とパスワード、そして**OTP**を入力する機構だけです。
+まずは基本から自分のアカウントにログインしてみましょう。必要なのは電話番号とパスワード、そして **OTP** を入力する機構だけです。
 
 ```typescript
 import { PayPay } from 'paypax'
@@ -101,20 +101,20 @@ import { PayPayStatus } from 'paypax'
 
 ここで色々importしています。
 
-**PayPay**はアプリを管理する本体です。
-**PayPayStatus**は様々なステータスが入ったオブジェクトです。
-**PayPayStatus**を使う事でログインに成功したんだな、失敗したんだな、OTP が必要なんだな、などのステータスを確認できます。
+ **PayPay** はアプリを管理する本体です。
+ **PayPayStatus** は様々なステータスが入ったオブジェクトです。
+ **PayPayStatus** を使う事でログインに成功したんだな、失敗したんだな、OTP が必要なんだな、などのステータスを確認できます。
 
 その部分がここです。
 `if (result.status === PayPayStatus.LoginNeedOTP) { // OTP が必要というステータスが返る`
 
 これだけでログインできます。
-またリカバリという一意の文字列を生成し、それだけで簡単にインスタンスを再起動できる機能もありますが説明が難しいので**disscus**で聞いてください！
+またリカバリという一意の文字列を生成し、それだけで簡単にインスタンスを再起動できる機能もありますが説明が難しいので **disscus** で聞いてください！
 これを利用すると、この一意の文字列をcookieに入れて、Web版PayPayを作るのようなことができます。
 
 ## どんなメソッドがあるの
 大体のことが出来ます。
-機能追加の**PR**や、要望は**disscus**まで。
+機能追加の **PR** や、要望は **disscus** まで。
 
 ### getBalance
 
