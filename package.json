@@ -1,6 +1,6 @@
 {
   "name": "paypax",
-  "version": "1.5.3",
+  "version": "1.5.5",
   "description": "Library for automate PayPay operations",
   "scripts": {
     "format": "prettier --write ./src/*.{ts,tsx} ./src/**/*.{ts,tsx}",

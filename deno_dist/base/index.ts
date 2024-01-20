@@ -85,8 +85,6 @@ export class PayPay {
         this.uuid = uuid
       } else {
         throw new PayPayError('UUID is not valid', 0).fire()
-
-        return this.createLoginResult(false, 'LoginFailed')
       }
     } else {
       this.uuid = crypto.randomUUID()
