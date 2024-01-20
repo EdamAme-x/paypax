@@ -12,6 +12,7 @@ describe('PayPayError', () => {
   test('PayPayError Method', () => {
     try {
       throw error.fire()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: Error | any) {
       expect(error.message).toBe('PayPaxError [1] : test')
     }

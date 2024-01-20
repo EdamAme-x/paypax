@@ -16,7 +16,9 @@ describe('Util', () => {
     const password = 'ctkpaarR2'
     const uuid = 'a9b3d5c6-7d8e-9f0a-bcde-fghijk'
 
-    expect(util.parseRecoveryCode(phone, password, uuid)).toBe('eyJhbGcMDkwMTkxOTQ1NDU=.Y3RrcGFhclIy.YTliM2Q1YzYtN2Q4ZS05ZjBhLWJjZGUtZmdoaWpr')
+    expect(util.parseRecoveryCode(phone, password, uuid)).toBe(
+      'eyJhbGcMDkwMTkxOTQ1NDU=.Y3RrcGFhclIy.YTliM2Q1YzYtN2Q4ZS05ZjBhLWJjZGUtZmdoaWpr'
+    )
   })
 
   test('unparseRecoveryCode', () => {
@@ -37,8 +39,8 @@ describe('Util', () => {
       },
       payload: {
         paypay: 'resultCode',
-        oosugi: 'dounikashite'
-      }
+        oosugi: 'dounikashite',
+      },
     }
 
     expect(util.parseBalanceContext(failResponse, false)).toStrictEqual({
@@ -47,7 +49,7 @@ describe('Util', () => {
       total: 0,
       currency: 'JPY',
       updated_at: new Date(0).toISOString(),
-      raw: failResponse
+      raw: failResponse,
     })
   })
 
@@ -59,8 +61,8 @@ describe('Util', () => {
       },
       payload: {
         paypay: 'resultCode',
-        oosugi: 'dounikashite'
-      }
+        oosugi: 'dounikashite',
+      },
     }
 
     expect(util.parseResultMessage(eg1)).toBe('Example 1')
@@ -69,8 +71,8 @@ describe('Util', () => {
       header: {},
       payload: {
         paypay: 'resultCode',
-        oosugi: 'dounikashite'
-      }
+        oosugi: 'dounikashite',
+      },
     }
 
     expect(util.parseResultMessage(eg2)).toBe('unknown')

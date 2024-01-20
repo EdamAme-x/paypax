@@ -1,4 +1,4 @@
-import { PayPayError, PayPayStatus, isPassword, isPhone, isSuccess, isUuid } from '..'
+import { PayPayError, PayPayStatus, isPassword, isPhone, isUuid } from '..'
 import { createHeader } from '../headers'
 import type {
   CreateLinkContext,
@@ -27,7 +27,6 @@ import {
   parseReceiveLink,
   parseRecoveryCode,
   unparseRecoveryCode,
-  parseResultMessage,
   parseAny,
 } from '../utils/parse'
 import { randomUUID } from '../utils/uuid'
@@ -443,7 +442,7 @@ export class PayPay {
     }
 
     if (result.header.resultCode === 'S9999') {
-      throw new PayPayError("You're not friends with user", 1).fire()
+      throw new PayPayError('You\'re not friends with user', 1).fire()
     }
 
     return parseAny(result, true)
