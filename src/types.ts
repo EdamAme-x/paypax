@@ -75,6 +75,7 @@ export type ResponseFail = {
 
 export type ResponseBalance = {
   success: boolean
+  message: string
   total: number
   currency: 'JPY' | string
   updated_at: string
@@ -91,6 +92,7 @@ export type ResponseBalance = {
 
 export type ResponseUserInfo = {
   success: boolean
+  message: string
   id: number
   user_id: string
   state: string
@@ -115,8 +117,9 @@ export type ResponseUserInfo = {
 
 export type ResponseCreateLink = {
   success: boolean
+  message: string
   orderId: string
-  orderStatus: 'PENDING'
+  orderStatus: string
   link: string
   transactionAt: string
   expiry: string
@@ -133,6 +136,7 @@ export type ResponseCreateLink = {
 
 export type ResponseGetLink = {
   success: boolean
+  message: string
   orderId: string
   orderType: string
   description: string
@@ -159,6 +163,7 @@ export type ResponseGetLink = {
 
 export type ResponseReceiveLink = {
   success: boolean
+  message: string
   messageId: string
   chatRoomId: string
   orderStatus: string

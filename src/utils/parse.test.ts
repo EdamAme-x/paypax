@@ -28,4 +28,55 @@ describe('Util', () => {
     expect(password).toBe('ctkpaarR2')
     expect(uuid).toBe('a9b3d5c6-7d8e-9f0a-bcde-fghijk')
   })
+
+  test('prase fail response', () => {
+    const failResponse = {
+      header: {
+        resultCode: 'S0001',
+        resultMessage: 'Invalid anyone',
+      },
+      payload: {
+        paypay: 'resultCode',
+        oosugi: 'dounikashite'
+      }
+    }
+
+    expect(util.parseBalanceContext(failResponse, false)).toStrictEqual({
+      success: false,
+      message: 'Invalid anyone',
+      total: 0,
+      currency: 'JPY',
+      updated_at: new Date(0).toISOString(),
+      raw: failResponse
+    })
+  })
+
+  test('parse resultMessage', () => {
+    const eg1 = {
+      header: {
+        resultCode: 'S0001',
+        resultMessage: 'Example 1',
+      },
+      payload: {
+        paypay: 'resultCode',
+        oosugi: 'dounikashite'
+      }
+    }
+
+    expect(util.parseResultMessage(eg1)).toBe('Example 1')
+
+    const eg2 = {
+      header: {},
+      payload: {
+        paypay: 'resultCode',
+        oosugi: 'dounikashite'
+      }
+    }
+
+    expect(util.parseResultMessage(eg2)).toBe('unknown')
+
+    const eg3 = {}
+
+    expect(util.parseResultMessage(eg3)).toBe('unknown')
+  })
 })
