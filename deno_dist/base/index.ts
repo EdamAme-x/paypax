@@ -124,7 +124,7 @@ export class PayPay {
         if ('result_info' in result) {
           if ('result_code' in result['result_info']) {
             if (result['result_info']['result_code'] === 'INTERNAL_AUTH_INVALID_GRANT_ERROR') {
-              return this.createLoginResult(false, 'LoginIncorrectPassword')
+              return this.createLoginResult(false, 'LoginIncorrectPassOrPhone')
             }
           }
         }
