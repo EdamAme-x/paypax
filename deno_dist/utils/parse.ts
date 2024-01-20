@@ -21,7 +21,6 @@ export function unparseRecoveryCode(recoveryCode: string): {
   uuid: string
 } {
   const decode = (string: string): string => {
-    console.log(string)
     return decodeURIComponent(atob(string))
   }
 
