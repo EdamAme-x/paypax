@@ -6,7 +6,8 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/EdamAme-x/paypax)](https://github.com/EdamAme-x/paypax/pulse)
 [![GitHub last commit](https://img.shields.io/github/last-commit/EdamAme-x/paypax)](https://github.com/EdamAme-x/paypax/commits/main)
 [![Deno badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fpaypax%2Fmod.ts)](https://doc.deno.land/https/deno.land/x/paypax/mod.ts)
-[![Discord badge](https://img.shields.io/discord/1115195558743781408?label=Discord&logo=Discord)](https://discord.gg/ctkpaarr)
+<iframe src="https://discord.com/widget?id=1115195558743781408&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
 # PayPax
 PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
