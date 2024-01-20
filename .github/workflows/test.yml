@@ -3,6 +3,8 @@ name: Vitest
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
 jobs:
   test:
     runs-on: ubuntu-latest
