@@ -209,8 +209,7 @@ export class PayPay {
       'resultMessage' in result['header']
     ) {
       if (
-        result['header']['resultCode'] === 'S0001' ||
-        result['header']['resultCode'] === 'S9999'
+        result['header']['resultCode'] === 'S0001'
       ) {
         // Refresh
         await this.login({
@@ -239,10 +238,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Get balance failed', 1).fire()
+      return parseBalanceContext(result, false)
     }
 
-    return parseBalanceContext(result)
+    return parseBalanceContext(result, true)
   }
 
   async getUserInfo(): Promise<ResponseUserInfo> {
@@ -258,10 +257,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Get user info failed', 1).fire()
+      return parseUserInfoContext(result, false)
     }
 
-    return parseUserInfoContext(result)
+    return parseUserInfoContext(result, true)
   }
 
   async createLink(amount: number, passcode?: string): Promise<ResponseCreateLink> {
@@ -295,10 +294,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Create link failed', 1).fire()
+      return parseCreateLink(result, false)
     }
 
-    return parseCreateLink(result)
+    return parseCreateLink(result, true)
   }
   
   async getLink(link: string): Promise<ResponseGetLink> {
@@ -320,10 +319,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Link is not found', 1).fire()
+      return parseGetLink(result, false)
     }
 
-    return parseGetLink(result)
+    return parseGetLink(result, true)
   }
 
   async receiveLink(link: string, passcode?: string): Promise<ResponseReceiveLink | undefined> {
@@ -364,10 +363,10 @@ export class PayPay {
       )
 
       if (!response.ok) {
-        throw new PayPayError('Receive link failed', 1).fire()
+        return parseReceiveLink(result, false)
       }
 
-      return parseReceiveLink(result)
+      return parseReceiveLink(result, true)
     }catch (_e) {
       throw new PayPayError('Invalid link', 1).fire()
     }
@@ -401,7 +400,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Reject link failed', 1).fire()
+      return {
+        success: false,
+        raw: result
+      }
     }
 
     return {
@@ -443,7 +445,10 @@ export class PayPay {
     )
 
     if (!response.ok) {
-      throw new PayPayError('Send money failed', 1).fire()
+      return {
+        success: false,
+        raw: result
+      }
     }
 
     if (result.header.resultCode === 'S9999') {
@@ -469,7 +474,10 @@ export class PayPay {
     })
 
     if (!response.ok) {
-      throw new PayPayError('Request path failed', 1).fire()
+      return {
+        success: false,
+        raw: result
+      }
     }
 
     return {
