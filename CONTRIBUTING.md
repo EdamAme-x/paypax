@@ -1,8 +1,9 @@
 FREE!!!
 
-ただし以下の三つを守る場合に限る
+However, only if the following three conditions are observed
 
-1. ちゃんとテストをする
-テストが難しい場合は PullRequest でその旨を伝える
-2. 他の形式に合わせる
-Disscussion や twitter で聞いて良し
+1. test properly
+If it is difficult to test, tell them so in the PullRequest.
+2. Conform to other formats.
+You can ask on Disscussion or twitter. 
+3. If in doubt, issue a PullRequest anyway.
