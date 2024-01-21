@@ -84,5 +84,5 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 Created by [@amex2189](https://ame-x.net)
 
-Python版 元版: [https://github.com/taka-4602/PayPaython](https://github.com/taka-4602/PayPaython)
-助言 Disocrd: @developerspartner 
+Python版: [https://github.com/taka-4602/PayPaython](https://github.com/taka-4602/PayPaython)
+設計元 Disocrd: @developerspartner 
