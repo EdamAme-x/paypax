@@ -88,6 +88,16 @@ if (result.status === PayPayStatus.LoginNeedOTP) { // OTP が必要という�
 
 これでログインできます！実行すると、電話番号のSMSに四桁のOTP(確認コード)が送信されるので、それを入力してログインすることができます。
 
+ちなみに `paypay.getUUID()` で自分のUUIDを取得できます。
+そのUUIDを使うと、
+```
+const result = await paypay.login({
+    uuid: "..."
+})
+```
+
+OTP入力無しで一発でログインできます。
+
 そして `await paypay.getBalance()` で自分の残高を確認できます。
 
 ちなみに何度連続的にログインしても制限には、ひっかからないようにしているので安心してデバッグして下さい！
@@ -111,6 +121,18 @@ import { PayPayStatus } from 'paypax'
 これだけでログインできます。
 またリカバリという一意の文字列を生成し、それだけで簡単にインスタンスを再起動できる機能もありますが説明が難しいので **disscus** で聞いてください！
 これを利用すると、この一意の文字列をcookieに入れて、Web版PayPayを作るのようなことができます。
+
+ちなみに、 `statusof` というメソッドを使うと、
+
+```typescript
+if (statusof(result.status)) {
+    console.log("ログイン成功しました！")
+}else {
+    console.log("ログイン失敗しました！")
+}
+```
+
+のように大まかに成功したか、失敗したかを分けられます。
 
 ## どんなメソッドがあるの
 大体のことが出来ます。
@@ -178,6 +200,27 @@ console.log(await paypay.request("エンドポイント"))
 ```typescript
 console.log(await paypay.rejectLink("https://pay.paypay.ne.jp/~"))
 ```
+
+## メソッドが返す値
+
+```typescript
+const result = await paypay.createLink(100)
+```
+
+`result` には以下のような値が入っています。
+
+- `result.success` 
+boolean で入っています。
+大まかに成功したか失敗したかを分類できます。 (100% 正しい訳ではありませんが、信用は出来ます)
+- `result.message` 
+string で入っています。
+結果に対するメッセージを取得できます。
+- `result.[keyName]
+様々な情報 (例えばリンクの情報取得だと金額) を取得できます。
+- `result.raw`
+api から帰って来た値をそのまま入れています。
+ある程度の型補完は有ります。
+
 
 ## その他役に立つメソッド
 
