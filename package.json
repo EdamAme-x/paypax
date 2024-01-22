@@ -7,7 +7,7 @@
     "lint": "eslint --ext js,ts src",
     "lint:fix": "eslint --ext js,ts src --fix",
     "build": "rimraf dist && tsx ./build.ts",
-    "build:deno": "rimraf deno_dist && denoify",
+    "build:deno": "rimraf deno_dist && denoify && tsx ./deno_build.ts",
     "build:all": "pnpm build && pnpm build:deno",
     "release": "pnpm build:all && pnpm publish --no-git-checks",
     "release:all": "pnpm build:all && pnpm publish --no-git-checks && git add * && git commit -m 'auto: release' && git push",
