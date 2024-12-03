@@ -9,7 +9,7 @@
 [![Discord badge](https://img.shields.io/discord/1115195558743781408?label=Discord&logo=Discord)](https://discord.gg/ctkpaarr)
 
 # PayPax
-PayPay UnOffical api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
+PayPay Unofficial api Rapper Library | Various PayPay operations can be automated, from login to balance transfer and confirmation.
 Open Source Software 🎁
 
 <img src="/docs/docs/public/favicon.png" width="200" height="200" alt="icon" />
