@@ -142,6 +142,8 @@ export type ResponseGetLink = {
   description: string
   imageUrl: string
   amount: number
+  emoney_amount: number
+  prepaid_amount: number
   link: string
   isSetPasscode: boolean
   createdAt: string
